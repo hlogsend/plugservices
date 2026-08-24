@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Organizer Portal | PlugServices</title>
+<meta name="description" content="Sign in or register to see your ticket sales, guest list, payouts and door check-in.">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="https://tickets.plugservices.ca/wp-content/uploads/2024/04/cropped-PHOTO-2024-04-03-10-37-57_1-270x270.jpg">
+<style>
+:root{--flame:#F0562E;--grape:#4C2A86;--gold:#F5A623;--ink:#1A1230;--cream:#FFF8F0;--green:#1F9D6B;--muted:#6B6480;--line:#E4D9F5;--accent:#F0562E;--plum:#3A2B5C}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
+a{color:var(--flame);text-decoration:none}
+.wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+/* ===== main-site header ===== */
+.nav{background:#fff;border-bottom:1px solid #eee;position:relative;z-index:20}
+.nav-in{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 0}
+.logo{display:flex;align-items:center;gap:12px;font-weight:900;font-size:27px;letter-spacing:-.5px;color:var(--flame);flex-shrink:0}
+.logo img{width:48px;height:48px;border-radius:11px;object-fit:cover}
+.logo b{color:var(--grape)}
+.logo .wordmark{white-space:nowrap}
+.nav-links{display:flex;flex-wrap:nowrap;white-space:nowrap;gap:20px;font-weight:600;font-size:15px;color:var(--plum)}
+.nav-links a{color:inherit}
+.nav-links a:hover,.nav-links a.active{color:var(--flame)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.lang a{font-weight:800;font-size:13px;color:var(--muted);cursor:pointer}
+.lang a.on{color:var(--flame)}
+.hamb{display:none;background:none;border:0;font-size:26px;line-height:1;cursor:pointer;color:var(--grape)}
+.sob{display:none;background:#fff;color:#B3261E;border:1.5px solid #B3261E;border-radius:10px;padding:8px 16px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit}
+.sob:hover{background:#FDECEA}
+@media(max-width:900px){
+  .hamb{display:block}
+  .nav-links{position:absolute;top:100%;left:0;right:0;background:var(--cream);flex-direction:column;gap:0;padding:6px 22px 14px;border-bottom:1px solid var(--line);display:none}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:13px 2px;border-bottom:1px solid var(--line);font-size:16px}
+  .nav-links a:last-child{border-bottom:0}
+}
+@media(max-width:640px){.logo{font-size:23px;gap:9px}.logo img{width:48px;height:48px}}
+/* ===== hero ===== */
+
+.hero p{color:#e2d8ff;margin-top:6px;font-size:15px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:0 6px 24px rgba(26,18,48,.06)}
+.auth{max-width:940px;margin:-34px auto 40px;position:relative;display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:0 20px}
+@media(max-width:820px){.auth{grid-template-columns:1fr}}
+.auth h2{font-size:20px;margin-bottom:4px}
+.auth p.sub{color:var(--muted);font-size:13.5px;margin-bottom:14px}
+label{display:block;font-weight:700;font-size:13px;margin:12px 0 5px}
+input,select{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:11px;font:inherit;font-size:15px;background:#fff}
+input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(240,86,46,.12)}
+.btn{display:inline-block;background:var(--accent);color:#fff;font-weight:800;border:0;border-radius:11px;padding:13px 22px;font-size:15px;cursor:pointer;width:100%;margin-top:16px;font-family:inherit}
+.btn.grape{background:var(--grape)}
+.btn:disabled{opacity:.6}
+.sso{display:flex;gap:10px;margin-top:12px}
+.sso button{flex:1;border:1.5px solid var(--line);background:#fff;border-radius:11px;padding:11px;font-weight:700;font-size:13.5px;cursor:pointer;font-family:inherit;color:var(--ink)}
+.sso button:hover{border-color:var(--grape)}
+.err{display:none;background:#FDECEA;color:#B3261E;border-radius:10px;padding:10px 13px;font-size:13.5px;margin-top:12px;font-weight:600}
+.err.show{display:block}
+.ok{display:none;background:#EAF7F1;color:#1F9D6B;border-radius:10px;padding:12px 14px;font-size:13.5px;margin-top:12px;font-weight:600;line-height:1.5}
+.ok.show{display:block}
+.hint{font-size:12.5px;color:var(--muted);margin-top:14px;line-height:1.5}
+.dash{display:none;padding:26px 0 50px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:18px 0}
+.stat{background:#fff;border:1px solid var(--line);border-radius:13px;padding:13px 15px}
+.stat .l{font-size:10.5px;font-weight:800;letter-spacing:.5px;color:var(--muted);text-transform:uppercase}
+.stat .v{font-size:21px;font-weight:800;margin-top:3px}
+h3.sec{font-size:17px;margin:26px 0 10px}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;font-size:13.5px}
+th{background:var(--grape);color:#fff;text-align:left;padding:9px 12px;font-size:12px}
+td{padding:9px 12px;border-bottom:1px solid #f0ecf7;vertical-align:middle}
+tr:nth-child(even) td{background:#faf8fd}
+.pill{display:inline-block;border-radius:999px;padding:3px 10px;font-size:11.5px;font-weight:800}
+.pill.in{background:#EAF7F1;color:var(--green)}
+.pill.out{background:#FDECEA;color:#B3261E}
+.ck{background:var(--green);color:#fff;border:0;border-radius:9px;padding:7px 13px;font-weight:800;font-size:12.5px;cursor:pointer;font-family:inherit}
+.ck:disabled{background:#c8c3d6}
+.shr{white-space:nowrap}
+.shb{display:inline-block;border:1px solid var(--line);background:#fff;border-radius:8px;padding:4px 7px;margin:0 2px;font-size:15px;cursor:pointer;text-decoration:none;line-height:1}
+.shb:hover{border-color:var(--flame)}
+.paybox{background:var(--cream);border:1px solid #f0e4d4;border-radius:13px;padding:16px 18px;margin:14px 0;font-size:13.5px;line-height:1.6}
+.logout{background:none;border:none;color:var(--muted);font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
+.foot{text-align:center;color:var(--muted);font-size:11.5px;padding:22px;line-height:1.6}
+.spin{display:none;text-align:center;padding:40px;color:var(--muted);font-weight:700}
+@media(max-width:640px){.hero h1{font-size:23px}.sob{padding:7px 10px;font-size:12px}.nav-in{gap:8px}}
+
+.hero{background:linear-gradient(135deg,var(--grape),#2c1a52);position:relative;overflow:hidden;color:#fff;padding:40px 0}
+.hero:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.045) 0 2px,transparent 2px 46px)}
+.hero .wrap{position:relative}
+.hero h1{font-size:32px;letter-spacing:-.6px}
+.stat{background:linear-gradient(160deg,#fff,#FBF7FF);border:1px solid var(--line);border-radius:15px;padding:15px 17px;box-shadow:0 4px 16px rgba(76,42,134,.07);min-width:0}
+/* v67: "CAD 1230.00" must sit on ONE line — fluid size + nowrap, and the
+   currency code rendered smaller than the amount so wide values still fit. */
+.stat .v{font-size:clamp(15px,1.35vw,21px);white-space:nowrap;font-variant-numeric:tabular-nums;letter-spacing:-.3px;overflow:hidden}
+.stat .v .cur{font-size:.68em;font-weight:900;opacity:.72;margin-right:4px;letter-spacing:.3px;vertical-align:baseline}
+@media(max-width:900px){.stat .v{font-size:17px}}
+.card{border-radius:18px;box-shadow:0 10px 34px rgba(26,18,48,.09)}
+h3.sec{font-size:18px;margin:30px 0 12px;color:var(--grape);letter-spacing:-.2px}
+table{box-shadow:0 4px 18px rgba(26,18,48,.05)}
+.shb{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:9px;margin:0 2px;cursor:pointer;text-decoration:none;vertical-align:middle;transition:.12s}
+.shb:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(26,18,48,.14)}
+.shb svg{width:16px;height:16px}
+
+/* ===== v60: mobile safety — comfortable gutters, real tap targets, no iOS zoom ===== */
+html{overflow-x:clip}
+body{overflow-x:clip;max-width:100%}
+@media(max-width:900px){
+  .wrap,.dash,.login,.auth,.sec,.tix,.subscribe,.card,.panel,.box,.form,.reg,.hero-in,.phead .wrap{
+    padding-left:max(20px,env(safe-area-inset-left))!important;
+    padding-right:max(20px,env(safe-area-inset-right))!important;
+    max-width:100%!important}
+  .nav-in{min-width:0;gap:8px}
+  .logo{min-width:0;flex-shrink:1;overflow:hidden}
+  .logo .wordmark{overflow:hidden;text-overflow:clip;min-width:0}
+  .wordmark{font-size:clamp(13px,4.35vw,24px)!important;letter-spacing:-.4px!important}
+  .nav-right{min-width:0;flex-shrink:0;gap:6px}
+  .hamb{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;flex-shrink:0}
+  /* 16px inputs stop iOS zooming the page on focus */
+  input,select,textarea{font-size:16px!important}
+  input:not([type=checkbox]):not([type=radio]),select,textarea{min-height:48px}
+  button,.btn,a.btn{min-height:46px}
+  /* EN / FR toggle was 16x14 - unusable. Give it a real hit area. */
+  .lang a{display:inline-block;min-width:34px;min-height:34px;line-height:34px;text-align:center}
+  table{display:block;overflow-x:auto;max-width:100%}
+  pre,code{white-space:pre-wrap;word-break:break-word}
+  a{word-break:break-word}
+}
+@media(max-width:420px){
+  .wrap,.dash,.login,.auth,.sec,.tix,.subscribe,.card,.panel,.box,.form,.reg{
+    padding-left:20px!important;padding-right:20px!important}
+}
+
+/* ===== v60.1: measured follow-ups =====
+   1. Cards spanned edge-to-edge (L0) on the portals — padded inside, but with no
+      air around them. Inset the card itself so the margin is visible.
+   2. A 15px input survived the blanket rule (beaten on specificity), so it is
+      enforced in JS below as well. */
+@media(max-width:900px){
+  .login,.auth,.reg,.dash,.tix,.subscribe{
+    margin-left:auto!important;margin-right:auto!important;
+    width:calc(100% - 40px)!important;max-width:calc(100% - 40px)!important;box-sizing:border-box}
+  .login.card,.auth > .card,.reg > .card{border-radius:16px!important}
+}
+@media(max-width:420px){
+  .login,.auth,.reg,.dash,.tix,.subscribe{
+    width:calc(100% - 40px)!important;max-width:calc(100% - 40px)!important}
+}
+
+/* v64: Follow-us row — identical to the main site footer */
+.psoc{display:grid;grid-template-columns:repeat(3,44px);justify-content:center;gap:14px;margin:0 auto 14px}
+.psoc a{width:44px;height:44px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+.psoc a svg{width:21px;height:21px;fill:#fff;display:block}
+.psoc .fb{background:#1877F2}
+.psoc .ig{background:radial-gradient(circle at 30% 107%,#fdf497 0%,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285AEB 90%)}
+.psoc .wa{background:#25D366}
+
+/* v65: wordmark fits at every width — no half-words in the portal header */
+@media(max-width:430px){ .logo img{width:34px!important;height:34px!important} }
+@media(max-width:400px){ .wordmark{letter-spacing:-.55px!important} }
+@media(max-width:349px){ .logo .wordmark{display:none} .logo img{width:38px!important;height:38px!important} }
+</style>
+<link rel="canonical" href="https://organizer.plugservices.ca/">
+</head>
+<body>
+<header class="nav"><div class="wrap nav-in">
+  <a class="logo" href="https://plugservices.ca"><img src="https://tickets.plugservices.ca/wp-content/uploads/2024/04/cropped-PHOTO-2024-04-03-10-37-57_1-270x270.jpg" alt="PlugServices logo"><span class="wordmark notranslate" translate="no">Plug<b>Services</b></span></a>
+  <nav class="nav-links" id="navLinks">
+    <a href='https://plugservices.ca/events'>Find Events</a>
+    <a href='https://plugservices.ca/#cats'>Categories</a>
+    <a href='https://plugservices.ca/partners'>Partners</a>
+    <a href='https://plugservices.ca/submit-event'>Sell Tickets</a>
+    <a href='https://plugservices.ca/faq'>FAQ</a>
+    <a href='https://plugservices.ca/about'>About</a>
+  </nav>
+  <div class="nav-right">
+    <span class="lang" translate="no"><a data-l="en" class="on" onclick="setLang('en')">EN</a> / <a data-l="fr" onclick="setLang('fr')">FR</a></span>
+    <button class="sob" id="signoutBtn" onclick="doLogout()" data-i18n="logout">Sign out</button>
+    <button class="hamb" aria-label="Menu" onclick="document.getElementById('navLinks').classList.toggle('open')">☰</button>
+  </div>
+</div></header>
+<div class="hero"><div class="wrap">
+  <h1>🔑 <span data-i18n="heroTitle"></span></h1>
+  <p data-i18n="heroSub"></p>
+</div></div>
+
+<div class="auth" id="authBox">
+  <div class="card" id="loginBox">
+    <h2 data-i18n="signIn"></h2>
+    <p class="sub" data-i18n="signInSub"></p>
+    <form id="lf" onsubmit="return doLogin(event)">
+      <label data-i18n="email"></label><input id="lg" type="text" autocomplete="username" required>
+      <label data-i18n="password"></label><input id="pw" type="password" autocomplete="current-password" required>
+      <div class="err" id="lerr" data-i18n="badLogin"></div>
+      <button class="btn" id="lbtn" type="submit" data-i18n="signInBtn"></button>
+    </form>
+    <p class="hint" style="margin-top:16px;text-align:center;font-size:15px">
+      <a href="#" onclick="return showForgot()" style="color:var(--flame);font-weight:800" data-i18n="forgot"></a><br>
+      <span data-i18n="noAcct"></span> <a href="/organizer-register" style="color:var(--grape);font-weight:800" data-i18n="registerLink"></a>
+    </p>
+    <div id="forgotBox" style="display:none;margin-top:14px;padding:14px;background:#faf8fd;border:1px solid var(--line);border-radius:12px">
+      <b data-i18n="forgotTitle"></b>
+      <p class="sub" style="margin:6px 0 10px" data-i18n="forgotSub"></p>
+      <input id="fEmail" type="email" autocomplete="email" placeholder="you@email.com" style="width:100%">
+      <button class="btn" id="fBtn" type="button" onclick="doForgot()" style="margin-top:10px" data-i18n="forgotBtn"></button>
+      <p class="hint" id="fOk" style="display:none;color:#1faa53;font-weight:700;margin-top:10px" data-i18n="forgotOk"></p>
+    </div>
+    <div id="rpBox" style="display:none;margin-top:14px;padding:14px;background:#fff8f0;border:1px solid #F0E4D4;border-radius:12px">
+      <b data-i18n="rpTitle"></b>
+      <input id="rpPw" type="password" autocomplete="new-password" style="width:100%;margin-top:10px">
+      <input id="rpPw2" type="password" autocomplete="new-password" style="width:100%;margin-top:8px">
+      <button class="btn" id="rpBtn" type="button" onclick="doReset()" style="margin-top:10px" data-i18n="rpBtn"></button>
+      <p class="hint" id="rpMsg" style="display:none;font-weight:700;margin-top:10px"></p>
+    </div>
+  </div>
+  <div class="card" id="regCta" style="text-align:center">
+    <h2 data-i18n="newHere"></h2>
+    <p class="sub" data-i18n="newHereSub"></p>
+    <a class="btn grape" href="/organizer-register" style="display:block;text-decoration:none;text-align:center" data-i18n="goRegister"></a>
+    <p class="hint" style="margin-top:14px" data-i18n="regHint"></p>
+  </div>
+  </div>
+</div>
+<div class="spin" id="spin">⏳ …</div>
+<div class="dash wrap" id="dash">
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+    <div><b id="who"></b> · <span id="whoEmail" style="color:var(--muted)"></span></div>
+    <span><button class="logout" onclick="openPw()" data-i18n="pw" style="margin-right:14px"></button><button class="logout" onclick="doLogout()" data-i18n="logout"></button></span>
+  </div>
+  <div class="grid" id="stats"></div>
+  <div class="paybox" id="paybox"></div>
+  <h3 class="sec" data-i18n="yourEvents"></h3>
+  <div style="overflow-x:auto"><table id="evT"></table></div>
+  <div id="editBox" class="card" style="display:none;margin-top:14px"></div>
+  <div id="pwBox" class="card" style="display:none;margin-top:14px;max-width:430px"></div>
+  <h3 class="sec" data-i18n="guests"></h3>
+  <input id="gsearch" placeholder="Search name, email or ticket #…" style="max-width:320px;margin-bottom:10px" oninput="renderAtt()">
+  <button class="ck" style="background:var(--grape);margin-left:8px" onclick="downloadGuests()" data-i18n="dl">⬇️ Download guest list (Excel)</button>
+  <div style="overflow-x:auto"><table id="attT"></table></div>
+  <h3 class="sec" data-i18n="sales"></h3>
+  <div style="overflow-x:auto"><table id="ordT"></table></div>
+  <h3 class="sec" data-i18n="paylog"></h3>
+  <div style="overflow-x:auto"><table id="payT"></table></div>
+</div>
+<script>
+var API="https://tickets.plugservices.ca/wp-json/plug/v1";
+window.PSICONS={"fb": "<svg viewBox=\"0 0 24 24\" fill=\"#1877F2\"><path d=\"M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.09 10.13 24v-8.44H7.08v-3.49h3.05v-2.67c0-3.03 1.79-4.7 4.53-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.95.93-1.95 1.89v2.27h3.32l-.53 3.49h-2.79V24C19.61 23.09 24 18.1 24 12.07z\"/></svg>", "wa": "<svg viewBox=\"0 0 24 24\" fill=\"#25D366\"><path d=\"M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.4-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.44-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.5 0 1.47 1.07 2.89 1.22 3.09.15.2 2.11 3.22 5.1 4.51.71.31 1.27.49 1.7.63.72.23 1.37.2 1.88.12.57-.09 1.76-.72 2.01-1.42.25-.7.25-1.29.17-1.42-.07-.13-.27-.2-.57-.35zM12.05 21.79h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.9-9.88a9.83 9.83 0 0 1 6.99 2.9 9.83 9.83 0 0 1 2.9 7 9.9 9.9 0 0 1-9.9 9.87zM20.47 3.55A11.8 11.8 0 0 0 12.05 0C5.5 0 .16 5.33.16 11.89c0 2.1.55 4.14 1.59 5.94L.06 24l6.32-1.66a11.9 11.9 0 0 0 5.67 1.44h.01c6.55 0 11.89-5.33 11.89-11.89 0-3.18-1.24-6.16-3.48-8.34z\"/></svg>", "x": "<svg viewBox=\"0 0 24 24\" fill=\"#111111\"><path d=\"M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.4l-5.8-7.58-6.64 7.58H.47l8.6-9.83L0 1.15h7.59l5.24 6.93 6.07-6.93zm-1.29 19.5h2.04L6.49 3.24H4.3l13.31 17.41z\"/></svg>", "tg": "<svg viewBox=\"0 0 24 24\" fill=\"#26A5E4\"><path d=\"M11.94 0A12 12 0 1 0 24 12 12 12 0 0 0 11.94 0zm5.85 8.16-1.97 9.3c-.15.66-.54.82-1.1.51l-3-2.21-1.45 1.4a.76.76 0 0 1-.6.29l.21-3.05 5.56-5.02c.24-.21-.05-.33-.37-.12l-6.87 4.33-2.96-.93c-.64-.2-.66-.64.14-.95l11.57-4.46c.54-.2 1.01.12.84.91z\"/></svg>", "ms": "<svg viewBox=\"0 0 24 24\" fill=\"#0084FF\"><path d=\"M12 0C5.24 0 0 4.95 0 11.64c0 3.5 1.43 6.52 3.77 8.61.2.17.31.43.32.7l.07 2.14a.96.96 0 0 0 1.35.85l2.38-1.05c.2-.09.43-.1.64-.05 1.1.3 2.26.46 3.47.46 6.76 0 12-4.95 12-11.66S18.76 0 12 0zm7.2 8.96-3.52 5.6a1.8 1.8 0 0 1-2.6.48l-2.8-2.1a.72.72 0 0 0-.87 0l-3.79 2.87c-.5.38-1.16-.22-.83-.76l3.52-5.59a1.8 1.8 0 0 1 2.6-.48l2.8 2.1c.26.19.61.19.87 0l3.79-2.88c.5-.38 1.17.22.83.76z\"/></svg>", "em": "<svg viewBox=\"0 0 24 24\" fill=\"#F0562E\"><path d=\"M12 12.71 1.15 5.24C1.6 4.5 2.4 4 3.32 4h17.36c.92 0 1.72.5 2.17 1.24L12 12.71zM12 15.1 22.94 7.6c.04.2.06.4.06.62v9.55A2.57 2.57 0 0 1 20.43 20H3.57A2.57 2.57 0 0 1 1 17.78V8.23c0-.21.02-.42.06-.62L12 15.09z\"/></svg>", "ln": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#4C2A86\" stroke-width=\"2.4\" stroke-linecap=\"round\"><path d=\"M10 14a5 5 0 0 0 7.07 0l3.18-3.18a5 5 0 0 0-7.07-7.07L11.4 5.53\"/><path d=\"M14 10a5 5 0 0 0-7.07 0l-3.18 3.18a5 5 0 0 0 7.07 7.07l1.77-1.77\"/></svg>"};
+
+var I18N={
+ en:{heroTitle:"Organizer Portal",heroSub:"Your sales, your guests, your money — live, in one place.",
+  signIn:"Sign in",signInSub:"Use the organizer credentials PlugServices emailed you when you registered or submitted your first event.",
+  email:"Email",password:"Password",signInBtn:"Sign in →",badLogin:"That email or password didn't match — try again.",
+  forgot:"I forgot my password",forgotTitle:"Reset my password",forgotSub:"Enter your account email — we'll send you a reset link right away.",forgotBtn:"Email me a reset link →",forgotOk:"✓ If an account exists for that email, a reset link is on its way. Check your inbox (and spam).",
+  rpTitle:"Choose your new password (8+ characters, twice):",rpBtn:"Set my new password ✓",rpOk:"✓ Password updated — sign in above with your new password.",rpMismatch:"The two passwords don't match.",rpShort:"Use at least 8 characters.",rpExpired:"This reset link is invalid or expired — click 'I forgot my password' to get a fresh one.",
+  regTitle:"Register now — it's free",regSub:"Create your organizer account. We'll email your login right away, and your dashboard is ready before your first event goes live.",
+  rName:"Your name",rOrg:"Organization (optional)",rCity:"Your city",
+  regBtn:"Create my account →",regErr:"We couldn't create the account — check the email or try again.",
+  regOk:"🎉 Done! Check your inbox — your login and password are on the way. Sign in on the left once you have them.",
+  regHint:"Already listed an event with us? Your account may already exist — check your email or write hello@plugservices.ca.",
+  newHere:"New to PlugServices?",newHereSub:"Create your free organizer account — it takes a minute and your dashboard is ready before your first event goes live.",goRegister:"Register now — it's free →",noAcct:"Don't have an account yet?",registerLink:"Register here →",del:"Delete",delQ:"Delete this event permanently? This cannot be undone from here.",delOk:"✓ Event deleted",logout:"Sign out",pw:"⚙️ Change password",pwTitle:"Change my password",pwCur:"Current password",pwNew:"New password (8+ characters)",pwSave:"Update password ✓",pwDone:"✓ Password changed — sign in with your new password",edit:"✏️ Edit",editTitle:"Edit event",save:"Save changes ✓",cancel:"Cancel",dl:"⬇️ Download guest list (Excel)",yourEvents:"Your events",guests:"Guest list & check-in",sales:"Recent ticket sales",paylog:"Payments received",
+  checkin:"Check in",checked:"✓ Checked in",
+  stats:["Events","Tickets sold","Gross sales","Refunds","Paid to you","Balance due"]},
+ fr:{heroTitle:"Portail organisateur",heroSub:"Vos ventes, vos invités, votre argent — en direct, au même endroit.",
+  signIn:"Connexion",signInSub:"Utilisez les identifiants envoyés par PlugServices lors de votre inscription ou de votre premier événement.",
+  email:"Courriel",password:"Mot de passe",signInBtn:"Se connecter →",badLogin:"Courriel ou mot de passe incorrect — réessayez.",
+  forgot:"J'ai oublié mon mot de passe",forgotTitle:"Réinitialiser mon mot de passe",forgotSub:"Entrez le courriel de votre compte — nous vous envoyons un lien immédiatement.",forgotBtn:"M'envoyer le lien →",forgotOk:"✓ Si un compte existe pour ce courriel, un lien de réinitialisation est en route. Vérifiez votre boîte (et les indésirables).",
+  rpTitle:"Choisissez votre nouveau mot de passe (8+ caractères, deux fois) :",rpBtn:"Définir mon mot de passe ✓",rpOk:"✓ Mot de passe mis à jour — connectez-vous ci-dessus.",rpMismatch:"Les deux mots de passe ne correspondent pas.",rpShort:"Utilisez au moins 8 caractères.",rpExpired:"Ce lien est invalide ou expiré — cliquez sur « J'ai oublié mon mot de passe ».",
+  regTitle:"Inscrivez-vous — c'est gratuit",regSub:"Créez votre compte organisateur. Vos identifiants arrivent par courriel immédiatement.",
+  rName:"Votre nom",rOrg:"Organisation (facultatif)",rCity:"Votre ville",
+  regBtn:"Créer mon compte →",regErr:"Impossible de créer le compte — vérifiez le courriel et réessayez.",
+  regOk:"🎉 C'est fait ! Vérifiez votre boîte courriel — vos identifiants arrivent. Connectez-vous à gauche.",
+  regHint:"Déjà un événement chez nous ? Votre compte existe peut-être déjà — vérifiez vos courriels ou écrivez à hello@plugservices.ca.",
+  newHere:"Nouveau sur PlugServices ?",newHereSub:"Créez votre compte organisateur gratuit — une minute suffit, et votre tableau de bord est prêt avant la mise en ligne de votre événement.",goRegister:"S'inscrire — c'est gratuit →",noAcct:"Vous n'avez pas encore de compte ?",registerLink:"Inscrivez-vous ici →",del:"Supprimer",delQ:"Supprimer définitivement cet événement ? Action irréversible ici.",delOk:"✓ Événement supprimé",logout:"Déconnexion",pw:"⚙️ Changer le mot de passe",pwTitle:"Changer mon mot de passe",pwCur:"Mot de passe actuel",pwNew:"Nouveau mot de passe (8+ caractères)",pwSave:"Mettre à jour ✓",pwDone:"✓ Mot de passe changé — reconnectez-vous",edit:"✏️ Modifier",editTitle:"Modifier l’événement",save:"Enregistrer ✓",cancel:"Annuler",dl:"⬇️ Télécharger la liste (Excel)",yourEvents:"Vos événements",guests:"Liste des invités & check-in",sales:"Ventes récentes",paylog:"Paiements reçus",
+  checkin:"Enregistrer",checked:"✓ Présent",
+  stats:["Événements","Billets vendus","Ventes brutes","Remboursements","Payé à vous","Solde dû"]}};
+var L=localStorage.getItem("plang")||"en", D=null;
+function setLang(l){L=l;localStorage.setItem("plang",l);applyLang();if(D)render(D);}
+function applyLang(){document.querySelectorAll("[data-i18n]").forEach(function(n){var k=n.getAttribute("data-i18n");if(I18N[L][k])n.textContent=I18N[L][k];});
+ document.querySelectorAll(".lang a").forEach(function(a){a.classList.toggle("on",a.getAttribute("data-l")===L);});}
+function money(v){return '<span class="cur">'+(D&&D.currency||"CAD")+"</span>"+Number(v||0).toFixed(2);}
+async function me(){try{var r=await fetch(API+"/portal/me?nc="+Date.now(),{credentials:"include"});return await r.json();}catch(e){return{logged_in:false};}}
+async function boot(){
+  applyLang();
+  /* White-label password reset: link from the branded reset email lands here. */
+  var q=new URLSearchParams(location.search);
+  if(q.get("rp")==="1"&&q.get("login")&&q.get("key")){
+    document.getElementById("rpBox").style.display="block";
+    window.__rp={login:q.get("login"),key:q.get("key")};
+  }
+  var m=await me();
+  if(m.logged_in&&m.organizer){showDash();}
+}
+function showForgot(){
+  var b=document.getElementById("forgotBox");
+  b.style.display=(b.style.display==="none"||!b.style.display)?"block":"none";
+  var lg=document.getElementById("lg").value;
+  if(lg&&lg.indexOf("@")>0){document.getElementById("fEmail").value=lg;}
+  return false;
+}
+async function doForgot(){
+  var em=(document.getElementById("fEmail").value||"").trim();
+  if(em.indexOf("@")<1){document.getElementById("fEmail").focus();return;}
+  var b=document.getElementById("fBtn");b.disabled=true;
+  var branded=false;
+  try{
+    var r=await fetch(API+"/portal/forgot",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:em})});
+    branded=r.ok;
+  }catch(e){}
+  if(!branded){
+    /* fallback: WordPress native reset email (until the branded endpoint is live) */
+    try{
+      var fd=new FormData();fd.append("user_login",em);fd.append("wp-submit","Get New Password");
+      await fetch("https://tickets.plugservices.ca/wp-login.php?action=lostpassword",{method:"POST",body:fd,mode:"no-cors"});
+    }catch(e){}
+  }
+  document.getElementById("fOk").style.display="block";
+  b.disabled=false;
+}
+async function doReset(){
+  var p1=document.getElementById("rpPw").value,p2=document.getElementById("rpPw2").value;
+  var msg=document.getElementById("rpMsg");msg.style.display="block";
+  if(p1.length<8){msg.style.color="#c0392b";msg.textContent=I18N[L].rpShort;return;}
+  if(p1!==p2){msg.style.color="#c0392b";msg.textContent=I18N[L].rpMismatch;return;}
+  var b=document.getElementById("rpBtn");b.disabled=true;
+  try{
+    var r=await fetch(API+"/portal/reset",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({login:window.__rp.login,key:window.__rp.key,password:p1})});
+    var j=null;try{j=await r.json();}catch(e){}
+    if(r.ok&&j&&j.ok){
+      msg.style.color="#1faa53";msg.textContent=I18N[L].rpOk;
+      document.getElementById("lg").value=window.__rp.login;
+      history.replaceState(null,"",location.pathname);
+    } else {
+      msg.style.color="#c0392b";msg.textContent=I18N[L].rpExpired;b.disabled=false;
+    }
+  }catch(e){msg.style.color="#c0392b";msg.textContent=I18N[L].rpExpired;b.disabled=false;}
+}
+async function doLogin(ev){
+  ev.preventDefault();
+  var b=document.getElementById("lbtn");b.disabled=true;
+  document.getElementById("lerr").classList.remove("show");
+  var fd=new FormData();
+  fd.append("log",document.getElementById("lg").value);
+  fd.append("pwd",document.getElementById("pw").value);
+  fd.append("testcookie","1");fd.append("rememberme","forever");
+  try{await fetch("https://tickets.plugservices.ca/wp-login.php",{method:"POST",body:fd,mode:"no-cors",credentials:"include"});}catch(e){}
+  var m=await me();
+  if(m.logged_in&&m.organizer){showDash();}
+  else{document.getElementById("lerr").classList.add("show");b.disabled=false;}
+  return false;
+}
+async function doRegister(ev){
+  ev.preventDefault();
+  var b=document.getElementById("rbtn");b.disabled=true;
+  document.getElementById("rerr").classList.remove("show");
+  document.getElementById("rok").classList.remove("show");
+  try{
+    var r=await fetch(API+"/register-organizer",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({name:document.getElementById("rname").value,org:document.getElementById("rorg").value,
+        email:document.getElementById("remail").value,city:document.getElementById("rcity").value,
+        website:document.getElementById("rweb").value})});
+    var j=await r.json();
+    if(j&&j.ok){
+      var ok=document.getElementById("rok");
+      if(j.existing){ok.textContent=(L==="fr"?"Un compte existe déjà pour ce courriel — vos identifiants vous ont été envoyés précédemment. Écrivez à hello@plugservices.ca pour les réinitialiser.":"An account already exists for this email — your credentials were emailed previously. Write hello@plugservices.ca to reset them.");}
+      ok.classList.add("show");
+      document.getElementById("rf").reset();
+    } else {document.getElementById("rerr").classList.add("show");}
+  }catch(e){document.getElementById("rerr").classList.add("show");}
+  b.disabled=false;
+  return false;
+}
+async function doLogout(){
+  try{await fetch(API+"/portal/logout",{method:"POST",credentials:"include"});}catch(e){}
+  try{localStorage.removeItem("porg");}catch(e){}
+  location.href=location.pathname+"?out="+Date.now();
+}
+async function showDash(){
+  document.getElementById("authBox").style.display="none";
+  document.getElementById("spin").style.display="block";
+  try{
+    var r=await fetch(API+"/portal/organizer?nc="+Date.now(),{credentials:"include"});
+    D=await r.json();
+    render(D);
+  }catch(e){ document.getElementById("spin").textContent="Could not load your data — refresh to retry."; return; }
+  document.getElementById("spin").style.display="none";
+  document.getElementById("dash").style.display="block";
+  var sb=document.getElementById("signoutBtn"); if(sb)sb.style.display="inline-block";
+}
+function render(d){
+  applyLang();
+  document.getElementById("who").textContent=d.name;
+  document.getElementById("whoEmail").textContent=d.email;
+  var vals=[d.events.length,d.tickets,money(d.gross),money(d.refunds),money(d.paid),money(d.due)];
+  var cols=["var(--grape)","var(--flame)","var(--ink)","var(--muted)","var(--green)","var(--flame)"];
+  document.getElementById("stats").innerHTML=I18N[L].stats.map(function(lab,i){
+    return '<div class="stat"><div class="l">'+lab+'</div><div class="v" style="color:'+cols[i]+'">'+vals[i]+"</div></div>";}).join("");
+  document.getElementById("paybox").innerHTML="💰 <b>How you get paid:</b> 0% platform fee · paid within 5 business days after your event · "
+    +(d.payout_method?("<b>"+d.payout_method+"</b>"+(d.payout_target?" → "+d.payout_target:"")):"payout method not set — email hello@plugservices.ca")
+    +" · refunds follow your event's policy.";
+  document.getElementById("evT").innerHTML="<tr><th>Event</th><th>Date</th><th>Sold</th><th>Capacity</th><th>Checked in</th><th>Gross</th><th></th><th>Share my event</th></tr>"
+    +d.events.map(function(e){return "<tr><td><b><a href='"+e.link+"' target='_blank'>"+e.title+"</a></b></td><td>"+(e.date||"")+"</td><td><b>"+e.sold+"</b></td><td>"+(e.capacity||"—")+"</td><td>"+e.checked_in+"</td><td>"+money(e.gross)+"</td><td><button class='ck' style='background:var(--grape)' onclick='openEdit("+e.id+")'>"+I18N[L].edit+"</button> <button class='ck' style='background:#B3261E' onclick='delEvent("+e.id+")'>"+I18N[L].del+"</button></td><td class='shr'>"+shareRow(e)+"</td></tr>";}).join("");
+  renderAtt();
+  renderOrders();
+  loadPayments();
+  document.getElementById("payT").innerHTML="<tr><th>Date</th><th>Amount</th><th>Reference</th></tr>"
+    +((d.payouts&&d.payouts.length)?d.payouts.map(function(p){return "<tr><td>"+(p.date||"")+"</td><td>"+money(p.amount)+"</td><td>"+(p.ref||"")+"</td></tr>";}).join("")
+    :"<tr><td colspan='3' style='color:var(--muted)'>No payouts yet — your balance above is what PlugServices owes you.</td></tr>");
+}
+var PM={};            /* order # -> payment method title */
+var PM_EMAIL={};      /* buyer email -> payment method title */
+function pmBadge(t){
+  if(!t)return "";
+  var etr=/interac|transfer|bacs/i.test(t);
+  return "<span class='pill' style='background:"+(etr?"#e6f8ec;color:#1a7f42":"#efe9fb;color:#4C2A86")+";font-weight:800'>"+(etr?"💸 e-Transfer":"💳 Card")+"</span>";
+}
+function renderOrders(){
+  if(!D)return;
+  document.getElementById("ordT").innerHTML="<tr><th>#</th><th>Date</th><th>Buyer</th><th>Email</th><th>Event</th><th>Qty</th><th>Amount</th><th>Paid by</th></tr>"
+    +(D.orders||[]).map(function(o){return "<tr><td>#"+o.no+"</td><td>"+o.date+"</td><td>"+o.buyer+"</td><td>"+o.email+"</td><td>"+o.event+"</td><td>"+o.qty+"</td><td>"+money(o.total)+"</td><td>"+(pmBadge(PM[String(o.no)])||"—")+"</td></tr>";}).join("")||"";
+}
+async function loadPayments(){
+  try{
+    var r=await fetch(API+"/portal/payments?nc="+Date.now(),{credentials:"include"});
+    if(!r.ok)return;
+    var j=await r.json();
+    (j.payments||[]).forEach(function(p){PM[String(p.no)]=p.pm;if(p.email)PM_EMAIL[(p.email||"").toLowerCase()]=p.pm;});
+    renderOrders();renderAtt();
+  }catch(e){}
+}
+function renderAtt(){
+  if(!D)return;
+  var q=(document.getElementById("gsearch").value||"").toLowerCase();
+  var rows=(D.attendees||[]).filter(function(a){return !q||((a.name||"")+(a.email||"")+(a.event||"")+(a.code||"")).toLowerCase().indexOf(q)>-1;});
+  document.getElementById("attT").innerHTML="<tr><th>Guest</th><th>Ticket #</th><th>Email</th><th>Ticket</th><th>Paid by</th><th>Event</th><th>Status</th><th></th></tr>"
+    +rows.map(function(a){
+      var pm=PM_EMAIL[(a.email||"").toLowerCase()]||"";
+      return "<tr><td><b>"+(a.name||"")+"</b></td><td>"+(a.code||"")+"</td><td>"+(a.email||"")+"</td><td>"+(a.type||"")+"</td><td>"+(pmBadge(pm)||"—")+"</td><td>"+(a.event||"")+"</td>"
+        +"<td>"+(a.checked_in?"<span class='pill in'>"+I18N[L].checked+"</span>":"<span class='pill out'>—</span>")+"</td>"
+        +"<td>"+(a.checked_in?"":"<button class='ck' onclick='checkin("+a.id+",this)'>"+I18N[L].checkin+"</button>")+"</td></tr>";}).join("");
+}
+async function checkin(id,btn){
+  btn.disabled=true;btn.textContent="…";
+  try{
+    var r=await fetch(API+"/portal/checkin",{method:"POST",credentials:"include",
+      headers:{"Content-Type":"application/json"},body:JSON.stringify({attendee_id:id})});
+    var j=await r.json();
+    if(j.ok){(D.attendees||[]).forEach(function(a){if(a.id===id)a.checked_in=true;});renderAtt();}
+    else{btn.textContent="✗";}
+  }catch(e){btn.textContent="✗";btn.disabled=false;}
+}
+function shareRow(e){
+  var u=encodeURIComponent(e.link||"");
+  var t=encodeURIComponent("Join me at "+(e.title||"my event")+"! Tickets: "+(e.link||""));
+  var I=window.PSICONS;
+  return '<a class="shb" title="Facebook" href="https://www.facebook.com/sharer/sharer.php?u='+u+'" target="_blank" rel="noopener">'+I.fb+'</a>'
+    +'<a class="shb" title="Messenger (mobile)" href="fb-messenger://share/?link='+u+'">'+I.ms+'</a>'
+    +'<a class="shb" title="WhatsApp" href="https://wa.me/?text='+t+'" target="_blank" rel="noopener">'+I.wa+'</a>'
+    +'<a class="shb" title="Telegram" href="https://t.me/share/url?url='+u+'&text='+encodeURIComponent(e.title||"")+'" target="_blank" rel="noopener">'+I.tg+'</a>'
+    +'<a class="shb" title="X / Twitter" href="https://twitter.com/intent/tweet?text='+t+'" target="_blank" rel="noopener">'+I.x+'</a>'
+    +'<a class="shb" title="Email" href="mailto:?subject='+encodeURIComponent("Join me at "+(e.title||"my event"))+'&body='+t+'">'+I.em+'</a>'
+    +'<button class="shb" title="Copy link (Instagram, TikTok, Snapchat)" onclick="copyLink(\''+String(e.link||"").replace(/'/g,"")+'\',this)">'+I.ln+'</button>';
+}
+function copyLink(u,btn){
+  (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){btn.textContent="✅";setTimeout(function(){btn.textContent="🔗";},1600);},function(){prompt("Copy your event link:",u);});
+}
+async function openEdit(id){
+  var box=document.getElementById("editBox");
+  box.style.display="block"; box.innerHTML="⏳ …"; box.scrollIntoView({behavior:"smooth",block:"center"});
+  try{
+    var r=await fetch(API+"/portal/event?id="+id+"&nc="+Date.now(),{credentials:"include"});
+    var e=await r.json();
+    if(!e||!e.id){box.innerHTML="Could not load this event.";return;}
+    var tiers=(e.tiers&&e.tiers.length?e.tiers:[{name:"Ticket",price:0,qty:999,sold:0}]);
+    box.innerHTML='<h3 style="margin:0 0 4px;color:var(--grape)">'+I18N[L].editTitle+' — '+e.title+'</h3>'
+      +'<p class="sub" style="color:var(--muted);font-size:12.5px;margin:0 0 12px">Changes go live immediately on your event page.</p>'
+      +'<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">'
+      +'<div><label>Date</label><input id="ed_date" type="date" value="'+(e.date||"")+'"></div>'
+      +'<div><label>Start time</label><input id="ed_time" type="time" value="'+(e.time||"")+'"></div>'
+      +'<div><label>End time</label><input id="ed_endt" type="time" value="'+(e.end_time||"")+'"></div>'
+      +'<div><label>City</label><input id="ed_city" value="'+(e.city||"")+'"></div>'
+      +'<div><label>Venue name</label><input id="ed_venue" value="'+(e.venue||"")+'"></div>'
+      +'<div><label>Street address</label><input id="ed_addr" value="'+(e.address||"")+'"></div></div>'
+      +'<label>Description</label><textarea id="ed_desc" rows="5" style="width:100%;padding:12px;border:1.5px solid var(--line);border-radius:11px;font:inherit"></textarea>'
+      +'<label style="margin-top:12px">Tickets (sold seats are protected)</label><div id="ed_tiers">'
+      +tiers.map(function(t,i){return '<div style="display:flex;gap:8px;margin-bottom:6px;flex-wrap:wrap">'
+        +'<input placeholder="Name" value="'+String(t.name||"").replace(/"/g,"&quot;")+'" data-tf="name" style="flex:2;min-width:120px">'
+        +'<input placeholder="Price" type="number" min="0" step="0.01" value="'+(t.price||0)+'" data-tf="price" style="flex:1;min-width:80px">'
+        +'<input placeholder="Qty" type="number" min="'+(t.sold||0)+'" value="'+(t.qty||999)+'" data-tf="qty" style="flex:1;min-width:80px">'
+        +'<span style="align-self:center;font-size:11.5px;color:var(--muted)">'+(t.sold||0)+' sold</span></div>';}).join("")
+      +'</div><button class="ck" style="background:#fff;color:var(--grape);border:1.5px solid var(--line)" onclick="addTierRow()">+ Add ticket type</button>'
+      +'<div style="margin-top:14px;display:flex;gap:10px">'
+      +'<button class="btn" style="width:auto;margin:0" onclick="saveEdit('+id+')">'+I18N[L].save+'</button>'
+      +'<button class="ck" id="ed_cancel" style="background:#fff;color:var(--muted);border:1.5px solid var(--line)">'+I18N[L].cancel+'</button>'
+      +'<span id="ed_msg" style="align-self:center;font-weight:700;font-size:13px"></span></div>';
+    document.getElementById("ed_desc").value=e.description||"";
+    document.getElementById("ed_cancel").onclick=function(){box.style.display="none";};
+  }catch(err){box.innerHTML="Could not load this event.";}
+}
+function addTierRow(){
+  var d=document.createElement("div"); d.style.cssText="display:flex;gap:8px;margin-bottom:6px;flex-wrap:wrap";
+  d.innerHTML='<input placeholder="Name" data-tf="name" style="flex:2;min-width:120px"><input placeholder="Price" type="number" min="0" step="0.01" data-tf="price" style="flex:1;min-width:80px"><input placeholder="Qty" type="number" min="1" value="999" data-tf="qty" style="flex:1;min-width:80px"><span style="align-self:center;font-size:11.5px;color:var(--muted)">new</span>';
+  document.getElementById("ed_tiers").appendChild(d);
+}
+async function saveEdit(id){
+  var rows=[...document.querySelectorAll("#ed_tiers > div")].map(function(div){
+    var g=function(f){var el=div.querySelector("[data-tf="+f+"]");return el?el.value:"";};
+    return {name:g("name"),price:parseFloat(g("price"))||0,qty:parseInt(g("qty"))||999};
+  }).filter(function(t){return t.name;});
+  var body={id:id,date:document.getElementById("ed_date").value,time:document.getElementById("ed_time").value,
+    end_time:document.getElementById("ed_endt").value,city:document.getElementById("ed_city").value,
+    venue:document.getElementById("ed_venue").value,address:document.getElementById("ed_addr").value,
+    description:document.getElementById("ed_desc").value,tiers:rows};
+  var m=document.getElementById("ed_msg"); m.textContent="…";
+  try{
+    var r=await fetch(API+"/portal/update-event",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    var j=await r.json();
+    if(j&&j.ok){m.textContent="✓ Saved — live now"; m.style.color="var(--green)"; setTimeout(function(){showDash();},1200);}
+    else{m.textContent="✗ "+((j&&j.message)||"failed"); m.style.color="#B3261E";}
+  }catch(e2){m.textContent="✗ network error"; m.style.color="#B3261E";}
+}
+function openPw(){
+  var b=document.getElementById("pwBox");
+  b.style.display="block"; b.scrollIntoView({behavior:"smooth",block:"center"});
+  b.innerHTML='<h3 style="margin:0 0 10px;color:var(--grape)">'+I18N[L].pwTitle+'</h3>'
+    +'<label>'+I18N[L].pwCur+'</label><input id="pw_cur" type="password" autocomplete="current-password">'
+    +'<label>'+I18N[L].pwNew+'</label><input id="pw_new" type="password" autocomplete="new-password">'
+    +'<div style="margin-top:14px;display:flex;gap:10px"><button class="btn" style="width:auto;margin:0" onclick="savePw()">'+I18N[L].pwSave+'</button>'
+    +'<button class="ck" style="background:#fff;color:var(--muted);border:1.5px solid var(--line)" onclick="document.getElementById(&quot;pwBox&quot;).style.display=&quot;none&quot;">'+I18N[L].cancel+'</button>'
+    +'<span id="pw_msg" style="align-self:center;font-weight:700;font-size:13px"></span></div>';
+}
+async function savePw(){
+  var m=document.getElementById("pw_msg"); m.textContent="…"; m.style.color="var(--muted)";
+  try{
+    var r=await fetch(API+"/portal/password",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({current:document.getElementById("pw_cur").value,new:document.getElementById("pw_new").value})});
+    var j=await r.json();
+    if(j&&j.ok){m.textContent=I18N[L].pwDone; m.style.color="var(--green)"; setTimeout(function(){location.href=location.pathname+"?pw="+Date.now();},2200);}
+    else{m.textContent="✗ "+((j&&j.message)||"failed"); m.style.color="#B3261E";}
+  }catch(e){m.textContent="✗ network error"; m.style.color="#B3261E";}
+}
+async function delEvent(id){
+  if(!confirm(I18N[L].delQ)) return;
+  try{
+    var r=await fetch(API+"/portal/delete-event",{method:"POST",credentials:"include",
+      headers:{"Content-Type":"application/json"},body:JSON.stringify({id:id})});
+    var j=await r.json();
+    if(j&&j.ok){ alert(I18N[L].delOk); location.reload(); }
+    else { alert((j&&j.message)||"Could not delete this event."); }
+  }catch(e){ alert("Network error — please try again."); }
+}
+function downloadGuests(){
+  if(!D)return;
+  var rows=[["Guest name","Ticket #","Email","Phone","Ticket type","Event","Checked in"]];
+  (D.attendees||[]).forEach(function(a){rows.push([a.name||"",a.code||"",a.email||"",a.phone||"",a.type||"",a.event||"",a.checked_in?"YES":"no"]);});
+  var csv="\uFEFF"+rows.map(function(r){return r.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"';}).join(",");}).join("\r\n");
+  var b=new Blob([csv],{type:"text/csv;charset=utf-8"});
+  var a=document.createElement("a"); a.href=URL.createObjectURL(b);
+  a.download="plugservices-guest-list-"+new Date().toISOString().slice(0,10)+".csv";
+  document.body.appendChild(a); a.click(); a.remove();
+}
+boot();
+</script>
+<div class="foot"><div class="psoc"><a class="fb" href="https://www.facebook.com/profile.php?id=61577020693349" target="_blank" rel="noopener" aria-label="PlugServices on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.96h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg></a><a class="ig" href="https://instagram.com/plugevents_canada" target="_blank" rel="noopener" aria-label="PlugServices on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16M12 0C8.74 0 8.33.01 7.05.07c-1.28.06-2.15.26-2.91.56-.79.31-1.46.72-2.13 1.38C1.35 2.68.94 3.35.63 4.14c-.3.76-.5 1.63-.56 2.91C.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.28.26 2.15.56 2.91.31.79.72 1.46 1.38 2.13.67.66 1.34 1.07 2.13 1.38.76.3 1.63.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.28-.06 2.15-.26 2.91-.56.79-.31 1.46-.72 2.13-1.38.66-.67 1.07-1.34 1.38-2.13.3-.76.5-1.63.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.28-.26-2.15-.56-2.91-.31-.79-.72-1.46-1.38-2.13C21.32 1.35 20.65.94 19.86.63c-.76-.3-1.63-.5-2.91-.56C15.67.01 15.26 0 12 0z"/><path d="M12 5.84A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84zm0 10.16A4 4 0 1 1 16 12a4 4 0 0 1-4 4z"/><circle cx="18.41" cy="5.59" r="1.44"/></svg></a><a class="wa" href="https://whatsapp.com/channel/0029VbDlqhl9Gv7QmtEp7i3f" target="_blank" rel="noopener" aria-label="PlugServices WhatsApp Channel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.64-2.05-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.6-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.01-1.04 2.47s1.06 2.86 1.21 3.06c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.28.17-1.41-.07-.13-.27-.2-.57-.35z"/><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.28-1.38a9.87 9.87 0 0 0 4.75 1.21h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm0 18.13c-1.5 0-2.98-.4-4.27-1.17l-.31-.18-3.17.83.85-3.09-.2-.32a8.2 8.2 0 0 1-1.26-4.39c0-4.54 3.7-8.23 8.24-8.23a8.2 8.2 0 0 1 5.83 2.41 8.17 8.17 0 0 1 2.41 5.82c0 4.54-3.7 8.32-8.12 8.32z"/></svg></a></div><span translate="no">PlugServices</span> is an event promotion platform managed by <b translate="no">Plug Trading Services Inc.</b><br>
+<a href="https://plugservices.ca">plugservices.ca</a> · <a href="mailto:hello@plugservices.ca">hello@plugservices.ca</a><br>© 2026 Plug Trading Services Inc. All rights reserved.</div>
+
+<script>
+/* v60.1: guarantee every visible field is >=16px on phones. A 15px input was
+   winning the specificity fight and iOS zooms the whole page below 16px. */
+(function(){
+  function enforce(){
+    if(window.innerWidth>900) return;
+    document.querySelectorAll('input,select,textarea').forEach(function(e){
+      var t=(e.getAttribute('type')||'').toLowerCase();
+      if(t==='checkbox'||t==='radio'||t==='hidden') return;
+      if(parseFloat(getComputedStyle(e).fontSize) < 16) e.style.setProperty('font-size','16px','important');
+    });
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',enforce);}else{enforce();}
+  window.addEventListener('resize',enforce);
+  setTimeout(enforce,1200); setTimeout(enforce,3000);
+  new MutationObserver(enforce).observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
+</body>
+</html>

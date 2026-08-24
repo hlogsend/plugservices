@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact PlugServices</title>
+<meta name="description" content="Get in touch with PlugServices — for guests, organizers, venues, sponsors and partners.">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="https://tickets.plugservices.ca/wp-content/uploads/2024/04/cropped-PHOTO-2024-04-03-10-37-57_1-270x270.jpg">
+<link rel="canonical" href="https://plugservices.ca/contact.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PlugServices">
+<meta property="og:title" content="Contact PlugServices">
+<meta property="og:description" content="Get in touch with PlugServices — for guests, organizers, venues, sponsors and partners.">
+<meta property="og:url" content="https://plugservices.ca/contact.html">
+<meta property="og:image" content="https://tickets.plugservices.ca/wp-content/uploads/2024/04/cropped-PHOTO-2024-04-03-10-37-57_1-270x270.jpg">
+<meta property="og:locale" content="en_CA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Contact PlugServices">
+<meta name="twitter:description" content="Get in touch with PlugServices — for guests, organizers, venues, sponsors and partners.">
+<meta name="twitter:image" content="https://tickets.plugservices.ca/wp-content/uploads/2024/04/cropped-PHOTO-2024-04-03-10-37-57_1-270x270.jpg">
+</head>
+<body data-active="contact">
+<div id="site-header"></div>
+
+<div class="phead"><div class="wrap">
+  <div class="crumb"><a href='/'>Home</a> / Contact</div>
+  <h1>Get in touch</h1>
+  <p>Questions about tickets, partnerships, or listing your event? We usually reply within one business day.</p>
+</div></div>
+
+<section style="padding-top:30px">
+  <div class="wrap">
+    <div class="cols">
+      <form action='/submit-thanks' class='form' method='POST' name='contact' style='max-width:none'>
+        <input type="hidden" name="form-name" value="contact">
+        <p hidden aria-hidden="true"><label>Leave this field empty: <input name="bot-field"></label></p>
+        <div class="row">
+          <div><label>Name</label><input required name="name" placeholder="Your name"></div>
+          <div><label>Email</label><input required type="email" name="email" placeholder="you@email.com"></div>
+        </div>
+        <label>I'm reaching out as</label>
+        <select name="role"><option>A guest / ticket buyer</option><option>An event organizer</option><option>A venue</option><option>A sponsor / partner</option><option>Press / media</option></select>
+        <label>Message</label><textarea required name="message" placeholder="How can we help?"></textarea>
+        <div><script src='https://www.google.com/recaptcha/api.js'></script>
+<div class='g-recaptcha' data-sitekey='6LdnkKEqAAAAAPvyqoRAmjXxvE6evlb5z-5Ol90Y'></div>
+<noscript>
+  <div>
+  <div style="width: 302px; height: 422px; position: relative;">
+  <div style="width: 302px; height: 422px; position: absolute;">
+  <iframe src="https://www.google.com/recaptcha/api/fallback?k=6LdnkKEqAAAAAPvyqoRAmjXxvE6evlb5z-5Ol90Y" frameborder="0" scrolling="no"
+    style="width: 302px; height:422px; border-style: none;">
+  </iframe>
+  </div>
+  </div>
+  <div style="width: 300px; height: 60px; border-style: none; bottom: 12px; left: 25px; margin: 0px; padding: 0px; right: 25px; background: #f9f9f9; border: 1px solid #c1c1c1; border-radius: 3px;">
+    <textarea id="g-recaptcha-response" name="g-recaptcha-response" class="g-recaptcha-response"
+      style="width: 250px; height: 40px; border: 1px solid #c1c1c1; margin: 10px 25px; padding: 0px; resize: none;" >
+    </textarea>
+  </div>
+  </div>
+</noscript>
+</div>
+        <label class="consent"><input type="checkbox" name="consent-privacy" value="yes" required> I consent to PlugServices (Plug Trading Services Inc.) collecting and using this information to respond to my inquiry, per the <a href='/privacy' style='color:var(--flame);font-weight:700'>Privacy Policy</a> and applicable Canadian privacy law.</label>
+        <button class="btn btn-flame btn-lg" type="submit" style="margin-top:16px">Send message</button>
+      <p class="privacy-clause"><b>Privacy notice:</b> The personal information collected in this form is collected by Plug Trading Services Inc. (operating as PlugServices) for the purposes described above and is handled in accordance with applicable Canadian privacy laws. We never sell your data. You may access, correct, or request deletion of your information at any time by contacting <a href="mailto:hello@plugservices.ca">hello@plugservices.ca</a>.</p>
+        
+      </form>
+
+      <div>
+        <div class="card-flat" style="margin-bottom:18px">
+          <h3>Reach us</h3>
+          <p style="color:var(--muted);font-size:14px;margin-top:8px">✉️ hello@plugservices.ca<br>🌐 www.plugservices.ca<br>📍 Alberta, Canada</p>
+        </div>
+        <div class="card-flat">
+          <h3>For organizers</h3>
+          <p style="color:var(--muted);font-size:14px;margin:8px 0 12px">Ready to sell tickets? Skip the form and submit your event directly.</p>
+          <a class='btn btn-flame btn-sm' href='/submit-event'>List your event</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script src="site.js"></script>
+</body>
+</html>

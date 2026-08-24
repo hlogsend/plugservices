@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>African Events in Ottawa — Tickets &amp; What's On | PlugServices</title>
+<meta name="description" content="Find African and Caribbean events in Ottawa, Ontario — concerts, parties, comedy nights, festivals, conferences and national-day galas. Buy tickets in minutes, QR ticket emailed instantly.">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="https://tickets.plugservices.ca/wp-content/uploads/2024/04/cropped-PHOTO-2024-04-03-10-37-57_1-270x270.jpg">
+<link rel="canonical" href="https://plugservices.ca/events/ottawa">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PlugServices">
+<meta property="og:title" content="African Events in Ottawa — Tickets &amp; What's On | PlugServices">
+<meta property="og:description" content="Find African and Caribbean events in Ottawa, Ontario — concerts, parties, comedy nights, festivals, conferences and national-day galas. Buy tickets in minutes, QR ticket emailed instantly.">
+<meta property="og:url" content="https://plugservices.ca/events/ottawa">
+<meta property="og:image" content="https://tickets.plugservices.ca/wp-content/uploads/2024/04/cropped-PHOTO-2024-04-03-10-37-57_1-270x270.jpg">
+<meta property="og:locale" content="en_CA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="African Events in Ottawa — Tickets &amp; What's On | PlugServices">
+<meta name="twitter:description" content="Find African and Caribbean events in Ottawa, Ontario — concerts, parties, comedy nights, festivals, conferences and national-day galas. Buy tickets in minutes, QR ticket emailed instantly.">
+<meta name="twitter:image" content="https://tickets.plugservices.ca/wp-content/uploads/2024/04/cropped-PHOTO-2024-04-03-10-37-57_1-270x270.jpg">
+<script>window.__CITY_LANDING={slug:"ottawa",name:"Ottawa",prov:"Ontario"};</script>
+</head>
+<body data-active="events" data-city="Ottawa">
+<div id="site-header"></div>
+
+<div class="phead"><div class="wrap">
+  <div class="crumb"><a href='/'>Home</a> / Events</div>
+  <h1>Upcoming events</h1>
+  <p>Filter by city or type and grab your tickets. New events added weekly across Canada &amp; USA.</p>
+</div></div>
+
+<section style="padding-top:26px">
+  <div class="wrap">
+    <div class="discovery">
+      <div class="searchwrap">
+        <span class="mag">🔍</span>
+        <input id="evSearch" type="search" placeholder="Search events, cities, venues, organizers…" oninput="setSearch(this.value)" aria-label="Search events">
+      </div>
+      <button class="nearbtn" type="button" onclick="useMyLocation(this)">📍 Near me</button>
+      <select id="evWhen" onchange="setWhen(this)" aria-label="When">
+        <option value="all">Any date</option>
+        <option value="weekend">This weekend</option>
+        <option value="week">Next 7 days</option>
+        <option value="month">Next 30 days</option>
+      </select>
+      <select id="evSort" onchange="setSort(this)" aria-label="Sort by">
+        <option value="soon">Soonest first</option>
+        <option value="new">Recently added</option>
+        <option value="price">Lowest price</option>
+      </select>
+    </div>
+
+    <div style="margin:14px 0 6px;font-weight:800;color:var(--muted);font-size:13px;text-transform:uppercase;letter-spacing:.5px">City</div>
+    <div class="chips chips-light" data-chipgroup="city" style="margin-top:0">
+      <span class="chip active" data-val="all">All cities</span>
+      <span class="chip" data-val="Calgary">Calgary</span>
+      <span class="chip" data-val="Edmonton">Edmonton</span>
+      <span class="chip" data-val="Ottawa">Ottawa</span>
+      <span class="chip" data-val="Toronto">Toronto</span>
+      <span class="chip" data-val="Vancouver">Vancouver</span>
+      <span class="chip" data-val="Montréal">Montréal</span>
+      <span class="chip" data-val="Québec City">Québec City</span>
+      <span class="chip" data-val="New York City">New York City</span>
+      <span class="chip" data-val="Atlanta">Atlanta</span>
+      <span class="chip" data-val="Houston">Houston</span>
+      <span class="chip" data-val="Denver">Denver</span>
+      <span class="chip" data-val="Las Vegas">Las Vegas</span>
+      <span class="chip" data-val="International">🌍 International</span>
+    </div>
+    <div style="margin:18px 0 6px;font-weight:800;color:var(--muted);font-size:13px;text-transform:uppercase;letter-spacing:.5px">Type</div>
+    <button class="chip" id="likedChip" onclick="toggleLikedFilter(this)" style="margin-bottom:8px">❤️ Liked</button>
+    <div class="chips chips-light" data-chipgroup="cat" style="margin-top:0">
+      <span class="chip active" data-val="all">All</span>
+      <span class="chip" data-val="Concert">Concerts</span>
+      <span class="chip" data-val="Party">Parties</span>
+      <span class="chip" data-val="Comedy">Comedy</span>
+      <span class="chip" data-val="Festival">Festival</span>
+      <span class="chip" data-val="Conference">Conference</span>
+      <span class="chip" data-val="National Day">National Day</span>
+      <span class="chip" data-val="Gala">Gala</span>
+      <span class="chip" data-val="Brunch">Brunch</span>
+      <span class="chip" data-val="Gospel">Gospel</span>
+    </div>
+
+    <p id="sampleNote" class="note" style="display:none;margin-top:22px;background:#f3eefc;border-color:#e2d6f7;color:var(--grape)">&#128204; No live events match this filter yet &mdash; here's a <b>sample</b> of what a listing looks like. <a href='/submit-event' style='color:var(--flame);font-weight:800'>List your event free &rarr;</a></p>
+
+    <div class="resultbar"><span class="cnt" id="resultCount"></span><button class="clr" type="button" onclick="clearAllFilters()">Clear all filters</button></div>
+
+    <div class="grid g3" id="allEvents" style="margin-top:18px">
+      <a class='card' href='/event?e=ottawa'><div style="padding:16px"><div class="catlab">Party — Ottawa</div><h3>Ottawa White Party 2026</h3><p>Friday, September 4, 2026 · Cello Events, 2465 St Laurent Blvd, Ottawa. Dress code: all white. MC Couzo &amp; DJ Rikta. Tickets from $40.</p></div></a>
+      <a class='card' href='/event?e=brunch'><div style="padding:16px"><div class="catlab">Brunch / Family — Calgary</div><h3>Summer Brunch in Calgary</h3><p>Sunday, August 30, 2026 · Prairie Winds Park, 223 Castleridge Blvd NE, Calgary. Family-friendly African summer brunch by Cathy La Tigresse. Adults $20, kids tickets available.</p></div></a>
+      <a class='card' href='/event?e=edmonton'><div style="padding:16px"><div class="catlab">Comedy — Edmonton</div><h3>Festival Rire d'Afrique 2026 — Edmonton</h3><p>Saturday, October 10, 2026 · Edmonton. Ivorian comedy star Boukary live, presented by Pont Cultural Bridge. Standard $50, VIP available.</p></div></a>
+      <a class='card' href='/event?e=calgary'><div style="padding:16px"><div class="catlab">Comedy — Calgary</div><h3>Festival Rire d'Afrique 2026 — Calgary</h3><p>Sunday, October 11, 2026 · Calgary. Boukary headlines a night of African stand-up comedy. Standard $50, VIP available.</p></div></a>
+    </div>
+    <p id="noResults" class="note" style="display:none;margin-top:20px">No events match that filter yet — <a href='/events' style='color:var(--flame);font-weight:800'>clear filters</a> or <a href='/submit-event' style='color:var(--flame);font-weight:800'>list your event</a>.</p>
+
+    <div class="subscribe" style="margin-top:40px">
+      <div>
+        <h3>Never miss an event near you</h3>
+        <p>Get our weekly <b>What&rsquo;s On</b> email — the best African events in your city, every Thursday. Free, unsubscribe anytime.</p>
+      </div>
+      <form action='/submit-thanks' class='subform' method='POST' name='newsletter' onsubmit='var o=this.parentElement.querySelector(\'.subok\');if(o)o.classList.add(\'show\')'>
+        <input type="hidden" name="form-name" value="newsletter">
+        <p hidden aria-hidden="true"><label>Skip: <input name="bot-field2"></label></p>
+        <input type="email" name="email" required placeholder="you@email.com" aria-label="Your email">
+        <select name="city" aria-label="Your city">
+          <option value="">All cities</option>
+          <option>Calgary</option><option>Edmonton</option><option>Ottawa</option><option>Toronto</option>
+          <option>Vancouver</option><option>Montréal</option><option>New York City</option><option>Atlanta</option>
+          <option>Houston</option><option>Denver</option><option>Las Vegas</option><option>International</option>
+        </select>
+        <button class="btn btn-flame" type="submit">Subscribe</button>
+      </form>
+      <div class="subok">✓ You&rsquo;re on the list — see you Thursday.</div>
+    </div>
+
+    <div class="center" style="margin-top:30px">
+      <div class="note" style="display:inline-block">Don't see your event? <a href='/submit-event' style='color:var(--flame);font-weight:800'>List it free →</a></div>
+    </div>
+  </div>
+</section>
+
+<section id="pastWrap" style="display:none;padding-top:10px"><div class="wrap">
+  <div class="sec-head"><h2>Past events</h2><a href='/gallery'>Photo gallery →</a></div>
+  <div class="grid" id="pastEvents"></div>
+</div></section>
+<div id="site-footer"></div>
+<script src="/site.js"></script>
+</body>
+</html>

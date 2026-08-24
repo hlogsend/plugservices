@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /checkout.html
+Disallow: /submit-thanks.html
+
+Sitemap: https://plugservices.ca/sitemap.xml

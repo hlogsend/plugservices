@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Tickets | PlugServices</title>
+<meta name="description" content="Find your tickets and QR codes for PlugServices events.">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="https://tickets.plugservices.ca/wp-content/uploads/2024/04/cropped-PHOTO-2024-04-03-10-37-57_1-270x270.jpg">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{--flame:#F0562E;--grape:#4C2A86;--gold:#F5A623;--ink:#1A1230;--cream:#FFF8F0;--green:#1F9D6B;--muted:#6B6480;--line:#E4D9F5;--accent:#1F9D6B;--plum:#3A2B5C}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
+a{color:var(--flame);text-decoration:none}
+.wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+.nav{background:#fff;border-bottom:1px solid #eee;position:relative;z-index:20}
+.nav-in{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 0}
+.logo{display:flex;align-items:center;gap:12px;font-weight:900;font-size:27px;letter-spacing:-.5px;color:var(--flame);flex-shrink:0}
+.logo img{width:48px;height:48px;border-radius:11px;object-fit:cover}
+.logo b{color:var(--grape)}
+.logo .wordmark{white-space:nowrap}
+.nav-links{display:flex;flex-wrap:nowrap;white-space:nowrap;gap:20px;font-weight:600;font-size:15px;color:var(--plum)}
+.nav-links a{color:inherit}
+.nav-links a:hover{color:var(--flame)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.lang a{font-weight:800;font-size:13px;color:var(--muted);cursor:pointer}
+.lang a.on{color:var(--flame)}
+.hamb{display:none;background:none;border:0;font-size:26px;line-height:1;cursor:pointer;color:var(--grape)}
+@media(max-width:900px){
+  .hamb{display:block}
+  .nav-links{position:absolute;top:100%;left:0;right:0;background:var(--cream);flex-direction:column;gap:0;padding:6px 22px 14px;border-bottom:1px solid var(--line);display:none}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:13px 2px;border-bottom:1px solid var(--line);font-size:16px}
+  .nav-links a:last-child{border-bottom:0}
+}
+@media(max-width:640px){.logo{font-size:23px;gap:9px}.logo img{width:48px;height:48px}}
+
+.hero p{color:#e2d8ff;margin-top:6px;font-size:15px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:0 6px 24px rgba(26,18,48,.06)}
+.login{max-width:430px;margin:-34px auto 40px;position:relative}
+.login h2{font-size:20px;margin-bottom:4px}
+.login p.sub{color:var(--muted);font-size:13.5px;margin-bottom:16px}
+label{display:block;font-weight:700;font-size:13px;margin:12px 0 5px}
+input{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:11px;font:inherit;font-size:15px}
+input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(240,86,46,.12)}
+.btn{display:inline-block;background:var(--accent);color:#fff;font-weight:800;border:0;border-radius:11px;padding:13px 22px;font-size:15px;cursor:pointer;width:100%;margin-top:16px;font-family:inherit}
+.btn:disabled{opacity:.6}
+.err{display:none;background:#FDECEA;color:#B3261E;border-radius:10px;padding:10px 13px;font-size:13.5px;margin-top:12px;font-weight:600}
+.err.show{display:block}
+.hint{font-size:12.5px;color:var(--muted);margin-top:14px;line-height:1.5}
+.dash{display:none;padding:26px 0 50px}
+h3.sec{font-size:17px;margin:26px 0 10px}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;font-size:13.5px}
+th{background:var(--grape);color:#fff;text-align:left;padding:9px 12px;font-size:12px}
+td{padding:9px 12px;border-bottom:1px solid #f0ecf7;vertical-align:middle}
+tr:nth-child(even) td{background:#faf8fd}
+.pill{display:inline-block;border-radius:999px;padding:3px 10px;font-size:11.5px;font-weight:800}
+.pill.in{background:#EAF7F1;color:var(--green)}
+.tix{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.tik{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;position:relative}
+.tik .img{width:100%;height:140px;object-fit:cover;display:block;background:linear-gradient(135deg,var(--grape),var(--flame))}
+.tik .bd{padding:14px 16px 16px}
+.tik .ev{font-weight:800;font-size:15px;color:var(--grape)}
+.tik .meta{color:var(--muted);font-size:12.5px;margin:6px 0 10px;line-height:1.55}
+.qr{display:inline-block;background:var(--ink);color:#fff;border-radius:9px;padding:9px 14px;font-weight:800;font-size:12.5px;cursor:pointer;border:0;font-family:inherit}
+.qr.get{background:var(--flame)}
+.qr.act{background:var(--grape);margin-left:6px;margin-top:6px}
+.qrbox{display:none;text-align:center;padding:12px;background:#faf8fd;border-radius:11px;margin-top:10px}
+.qrbox.show{display:block}
+.qrbox .qrimg{display:inline-block;background:#fff;padding:10px;border-radius:10px;border:1px solid var(--line)}
+.qrbox .code{font-weight:800;font-size:13px;margin-top:8px;letter-spacing:1px}
+.qrbox .note{font-size:11.5px;color:var(--muted);margin-top:4px}
+.subscribe{background:linear-gradient(135deg,var(--grape),#2c1a52);border-radius:16px;color:#fff;padding:26px 24px;margin-top:30px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
+.subscribe .tt{font-size:18px;font-weight:800}
+.subscribe .ss{color:#e2d8ff;font-size:13.5px;margin-top:4px;line-height:1.5}
+.subscribe form{display:flex;gap:8px;flex-wrap:wrap}
+.subscribe input{max-width:250px;border:0}
+.subscribe .btn{width:auto;margin-top:0;background:var(--gold);color:var(--ink)}
+.subscribe .ig{color:#ffd9a8;font-weight:700;font-size:12.5px}
+.invite{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.shb{display:inline-block;border:1px solid var(--line);background:#fff;border-radius:8px;padding:4px 7px;margin:0 2px;font-size:14px;cursor:pointer;text-decoration:none;line-height:1}
+.shb:hover{border-color:var(--flame)}
+.logout{background:none;border:none;color:var(--muted);font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
+.foot{text-align:center;color:var(--muted);font-size:11.5px;padding:22px;line-height:1.6}
+.spin{display:none;text-align:center;padding:40px;color:var(--muted);font-weight:700}
+@media(max-width:640px){.hero h1{font-size:23px}.login{margin-top:-20px}}
+
+.hero{background:linear-gradient(135deg,var(--grape),#2c1a52);position:relative;overflow:hidden;color:#fff;padding:40px 0}
+.hero:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(255,255,255,.045) 0 2px,transparent 2px 46px)}
+.hero .wrap{position:relative}
+.hero h1{font-size:32px;letter-spacing:-.6px}
+.stat{background:linear-gradient(160deg,#fff,#FBF7FF);border:1px solid var(--line);border-radius:15px;padding:15px 17px;box-shadow:0 4px 16px rgba(76,42,134,.07)}
+.stat .v{font-size:23px}
+.card{border-radius:18px;box-shadow:0 10px 34px rgba(26,18,48,.09)}
+h3.sec{font-size:18px;margin:30px 0 12px;color:var(--grape);letter-spacing:-.2px}
+table{box-shadow:0 4px 18px rgba(26,18,48,.05)}
+.shb{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:9px;margin:0 2px;cursor:pointer;text-decoration:none;vertical-align:middle;transition:.12s}
+.shb:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(26,18,48,.14)}
+.shb svg{width:16px;height:16px}
+
+/* ===== v60: mobile safety — comfortable gutters, real tap targets, no iOS zoom ===== */
+html{overflow-x:clip}
+body{overflow-x:clip;max-width:100%}
+@media(max-width:900px){
+  .wrap,.dash,.login,.auth,.sec,.tix,.subscribe,.card,.panel,.box,.form,.reg,.hero-in,.phead .wrap{
+    padding-left:max(20px,env(safe-area-inset-left))!important;
+    padding-right:max(20px,env(safe-area-inset-right))!important;
+    max-width:100%!important}
+  .nav-in{min-width:0;gap:8px}
+  .logo{min-width:0;flex-shrink:1;overflow:hidden}
+  .logo .wordmark{overflow:hidden;text-overflow:clip;min-width:0}
+  .wordmark{font-size:clamp(13px,4.35vw,24px)!important;letter-spacing:-.4px!important}
+  .nav-right{min-width:0;flex-shrink:0;gap:6px}
+  .hamb{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;padding:0;flex-shrink:0}
+  /* 16px inputs stop iOS zooming the page on focus */
+  input,select,textarea{font-size:16px!important}
+  input:not([type=checkbox]):not([type=radio]),select,textarea{min-height:48px}
+  button,.btn,a.btn{min-height:46px}
+  /* EN / FR toggle was 16x14 - unusable. Give it a real hit area. */
+  .lang a{display:inline-block;min-width:34px;min-height:34px;line-height:34px;text-align:center}
+  table{display:block;overflow-x:auto;max-width:100%}
+  pre,code{white-space:pre-wrap;word-break:break-word}
+  a{word-break:break-word}
+}
+@media(max-width:420px){
+  .wrap,.dash,.login,.auth,.sec,.tix,.subscribe,.card,.panel,.box,.form,.reg{
+    padding-left:20px!important;padding-right:20px!important}
+}
+
+
+/* ===== v60.1: measured follow-ups =====
+   1. Cards spanned edge-to-edge (L0) on the portals — padded inside, but with no
+      air around them. Inset the card itself so the margin is visible.
+   2. A 15px input survived the blanket rule (beaten on specificity), so it is
+      enforced in JS below as well. */
+@media(max-width:900px){
+  .login,.auth,.reg,.dash,.tix,.subscribe{
+    margin-left:auto!important;margin-right:auto!important;
+    width:calc(100% - 40px)!important;max-width:calc(100% - 40px)!important;box-sizing:border-box}
+  .login.card,.auth > .card,.reg > .card{border-radius:16px!important}
+}
+@media(max-width:420px){
+  .login,.auth,.reg,.dash,.tix,.subscribe{
+    width:calc(100% - 40px)!important;max-width:calc(100% - 40px)!important}
+}
+
+
+/* v64: Follow-us row — identical to the main site footer */
+.psoc{display:grid;grid-template-columns:repeat(3,44px);justify-content:center;gap:14px;margin:0 auto 14px}
+.psoc a{width:44px;height:44px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+.psoc a svg{width:21px;height:21px;fill:#fff;display:block}
+.psoc .fb{background:#1877F2}
+.psoc .ig{background:radial-gradient(circle at 30% 107%,#fdf497 0%,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285AEB 90%)}
+.psoc .wa{background:#25D366}
+
+/* v65: wordmark fits at every width — no half-words in the portal header */
+@media(max-width:430px){ .logo img{width:34px!important;height:34px!important} }
+@media(max-width:400px){ .wordmark{letter-spacing:-.55px!important} }
+@media(max-width:349px){ .logo .wordmark{display:none} .logo img{width:38px!important;height:38px!important} }
+</style>
+<link rel="canonical" href="https://guest.plugservices.ca/">
+</head>
+<body>
+<header class="nav"><div class="wrap nav-in">
+  <a class="logo" href="https://plugservices.ca"><img src="https://tickets.plugservices.ca/wp-content/uploads/2024/04/cropped-PHOTO-2024-04-03-10-37-57_1-270x270.jpg" alt="PlugServices logo"><span class="wordmark notranslate" translate="no">Plug<b>Services</b></span></a>
+  <nav class="nav-links" id="navLinks">
+    <a href='https://plugservices.ca/events'>Find Events</a>
+    <a href='https://plugservices.ca/#cats'>Categories</a>
+    <a href='https://plugservices.ca/partners'>Partners</a>
+    <a href='https://plugservices.ca/submit-event'>Sell Tickets</a>
+    <a href='https://plugservices.ca/faq'>FAQ</a>
+    <a href='https://plugservices.ca/about'>About</a>
+  </nav>
+  <div class="nav-right">
+    <span class="lang" translate="no"><a data-l="en" class="on" onclick="setLang('en')">EN</a> / <a data-l="fr" onclick="setLang('fr')">FR</a></span>
+    <button class="hamb" aria-label="Menu" onclick="document.getElementById('navLinks').classList.toggle('open')">☰</button>
+  </div>
+</div></header>
+<div class="hero"><div class="wrap">
+  <h1>🎟️ <span data-i18n="heroTitle"></span></h1>
+  <p data-i18n="heroSub"></p>
+</div></div>
+
+<div class="login card" id="lookupBox">
+  <h2 data-i18n="findTix"></h2>
+  <p class="sub" data-i18n="findSub"></p>
+  <form onsubmit="return lookup(event)">
+    <label data-i18n="email"></label><input id="gm" type="email" required placeholder="you@email.com">
+    <div class="err" id="gerr" data-i18n="noTix"></div>
+    <button class="btn" id="gbtn" type="submit" data-i18n="findBtn"></button>
+  </form>
+  <p class="hint" data-i18n="ghint"></p>
+</div>
+<div class="spin" id="spin">⏳ …</div>
+<div class="dash wrap" id="dash">
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+    <div><b id="who"></b> · <span id="whoEmail" style="color:var(--muted)"></span></div>
+    <button class="logout" onclick="location.reload()" data-i18n="switch"></button>
+  </div>
+  <h3 class="sec" data-i18n="myTix"></h3>
+  <div class="tix" id="tix"></div>
+  <h3 class="sec" data-i18n="orders"></h3>
+  <div style="overflow-x:auto"><table id="ordT"></table></div>
+  <h3 class="sec" data-i18n="upcoming"></h3>
+  <div class="tix" id="up"></div>
+  <div class="subscribe" id="subBox">
+    <div style="flex:1;min-width:230px">
+      <div class="tt">📬 <span data-i18n="subTitle"></span></div>
+      <div class="ss" data-i18n="subSub"></div>
+      <div class="ig" style="margin-top:6px"><a href="https://instagram.com/plugevents_canada" target="_blank" rel="noopener" style="color:#ffd9a8">📸 @plugevents_canada</a></div>
+    </div>
+    <form onsubmit="return doSub(event)">
+      <input id="subEmail" type="email" required placeholder="you@email.com">
+      <button class="btn" id="subBtn" type="submit" data-i18n="subBtn"></button>
+    </form>
+  </div>
+</div>
+<script>
+var API="https://tickets.plugservices.ca/wp-json/plug/v1";
+window.PSICONS={"fb": "<svg viewBox=\"0 0 24 24\" fill=\"#1877F2\"><path d=\"M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.09 10.13 24v-8.44H7.08v-3.49h3.05v-2.67c0-3.03 1.79-4.7 4.53-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.95.93-1.95 1.89v2.27h3.32l-.53 3.49h-2.79V24C19.61 23.09 24 18.1 24 12.07z\"/></svg>", "wa": "<svg viewBox=\"0 0 24 24\" fill=\"#25D366\"><path d=\"M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.4-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.44-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.5 0 1.47 1.07 2.89 1.22 3.09.15.2 2.11 3.22 5.1 4.51.71.31 1.27.49 1.7.63.72.23 1.37.2 1.88.12.57-.09 1.76-.72 2.01-1.42.25-.7.25-1.29.17-1.42-.07-.13-.27-.2-.57-.35zM12.05 21.79h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.9-9.88a9.83 9.83 0 0 1 6.99 2.9 9.83 9.83 0 0 1 2.9 7 9.9 9.9 0 0 1-9.9 9.87zM20.47 3.55A11.8 11.8 0 0 0 12.05 0C5.5 0 .16 5.33.16 11.89c0 2.1.55 4.14 1.59 5.94L.06 24l6.32-1.66a11.9 11.9 0 0 0 5.67 1.44h.01c6.55 0 11.89-5.33 11.89-11.89 0-3.18-1.24-6.16-3.48-8.34z\"/></svg>", "x": "<svg viewBox=\"0 0 24 24\" fill=\"#111111\"><path d=\"M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.4l-5.8-7.58-6.64 7.58H.47l8.6-9.83L0 1.15h7.59l5.24 6.93 6.07-6.93zm-1.29 19.5h2.04L6.49 3.24H4.3l13.31 17.41z\"/></svg>", "tg": "<svg viewBox=\"0 0 24 24\" fill=\"#26A5E4\"><path d=\"M11.94 0A12 12 0 1 0 24 12 12 12 0 0 0 11.94 0zm5.85 8.16-1.97 9.3c-.15.66-.54.82-1.1.51l-3-2.21-1.45 1.4a.76.76 0 0 1-.6.29l.21-3.05 5.56-5.02c.24-.21-.05-.33-.37-.12l-6.87 4.33-2.96-.93c-.64-.2-.66-.64.14-.95l11.57-4.46c.54-.2 1.01.12.84.91z\"/></svg>", "ms": "<svg viewBox=\"0 0 24 24\" fill=\"#0084FF\"><path d=\"M12 0C5.24 0 0 4.95 0 11.64c0 3.5 1.43 6.52 3.77 8.61.2.17.31.43.32.7l.07 2.14a.96.96 0 0 0 1.35.85l2.38-1.05c.2-.09.43-.1.64-.05 1.1.3 2.26.46 3.47.46 6.76 0 12-4.95 12-11.66S18.76 0 12 0zm7.2 8.96-3.52 5.6a1.8 1.8 0 0 1-2.6.48l-2.8-2.1a.72.72 0 0 0-.87 0l-3.79 2.87c-.5.38-1.16-.22-.83-.76l3.52-5.59a1.8 1.8 0 0 1 2.6-.48l2.8 2.1c.26.19.61.19.87 0l3.79-2.88c.5-.38 1.17.22.83.76z\"/></svg>", "em": "<svg viewBox=\"0 0 24 24\" fill=\"#F0562E\"><path d=\"M12 12.71 1.15 5.24C1.6 4.5 2.4 4 3.32 4h17.36c.92 0 1.72.5 2.17 1.24L12 12.71zM12 15.1 22.94 7.6c.04.2.06.4.06.62v9.55A2.57 2.57 0 0 1 20.43 20H3.57A2.57 2.57 0 0 1 1 17.78V8.23c0-.21.02-.42.06-.62L12 15.09z\"/></svg>", "ln": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#4C2A86\" stroke-width=\"2.4\" stroke-linecap=\"round\"><path d=\"M10 14a5 5 0 0 0 7.07 0l3.18-3.18a5 5 0 0 0-7.07-7.07L11.4 5.53\"/><path d=\"M14 10a5 5 0 0 0-7.07 0l-3.18 3.18a5 5 0 0 0 7.07 7.07l1.77-1.77\"/></svg>"};
+
+var I18N={
+ en:{heroTitle:"My Tickets",heroSub:"Your tickets, your QR codes, your events — all in one place.",
+  findTix:"Find my tickets",findSub:"Enter the email you used when you registered or bought your ticket.",
+  email:"Your email",findBtn:"Show my tickets →",noTix:"We couldn't find tickets for that email. Check the spelling, or use the email from your confirmation.",
+  ghint:"Prefer a password? A full account option is coming soon — for now, your email is your key.",
+  switch:"Use a different email",myTix:"My tickets",orders:"My orders & receipts",upcoming:"More events you might like",
+  invite:"I'm going — invite friends:",showQR:"Show my QR code",hideQR:"Hide QR code",checked:"✓ Checked in",getTix:"Get tickets",qrNote:"Show this code at the door — the organizer scans or types it.",
+  emailTix:"Email my ticket",printTix:"Print ticket",sentOk:"Sent ✓ Check your inbox",sendFail:"Could not send — try again later",sending:"Sending…",soon:"Coming very soon — use Print for now",
+  subTitle:"Your Thursday event picks",subSub:"Every Thursday at 9 am: the Top 10 events happening near you, straight to your inbox. Free, one click to leave.",
+  subBtn:"Subscribe ✓",subDone:"🎉 You're on the list!"},
+ fr:{heroTitle:"Mes billets",heroSub:"Vos billets, vos codes QR, vos événements — au même endroit.",
+  findTix:"Trouver mes billets",findSub:"Entrez le courriel utilisé lors de votre inscription ou de votre achat.",
+  email:"Votre courriel",findBtn:"Voir mes billets →",noTix:"Aucun billet trouvé pour ce courriel. Vérifiez l'orthographe ou utilisez le courriel de votre confirmation.",
+  ghint:"Vous préférez un mot de passe ? Les comptes complets arrivent bientôt — pour l'instant, votre courriel est votre clé.",
+  switch:"Autre courriel",myTix:"Mes billets",orders:"Mes commandes et reçus",upcoming:"D'autres événements pour vous",
+  invite:"J'y vais — invitez vos amis :",showQR:"Voir mon code QR",hideQR:"Masquer le code QR",checked:"✓ Présent",getTix:"Billets",qrNote:"Montrez ce code à l'entrée — l'organisateur le scanne ou le tape.",
+  emailTix:"Recevoir par courriel",printTix:"Imprimer le billet",sentOk:"Envoyé ✓ Vérifiez votre boîte",sendFail:"Échec de l'envoi — réessayez plus tard",sending:"Envoi…",soon:"Bientôt disponible — utilisez Imprimer",
+  subTitle:"Vos sorties du jeudi",subSub:"Chaque jeudi à 9 h : le Top 10 des événements près de chez vous, dans votre boîte courriel. Gratuit, désabonnement en un clic.",
+  subBtn:"S'abonner ✓",subDone:"🎉 Vous êtes sur la liste !"}};
+var L=localStorage.getItem("plang")||"en", D=null;
+function setLang(l){L=l;localStorage.setItem("plang",l);applyLang();if(D)render(D);}
+function applyLang(){document.querySelectorAll("[data-i18n]").forEach(function(n){var k=n.getAttribute("data-i18n");if(I18N[L][k])n.textContent=I18N[L][k];});
+ document.querySelectorAll(".lang a").forEach(function(a){a.classList.toggle("on",a.getAttribute("data-l")===L);});}
+async function lookup(ev){
+  ev.preventDefault();
+  var b=document.getElementById("gbtn");b.disabled=true;
+  document.getElementById("gerr").classList.remove("show");
+  try{
+    var r=await fetch(API+"/portal/guest",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({email:document.getElementById("gm").value})});
+    var d=await r.json();
+    if(d && (d.tickets||[]).length + (d.orders||[]).length > 0){D=d;show();}
+    else{document.getElementById("gerr").classList.add("show");b.disabled=false;}
+  }catch(e){document.getElementById("gerr").classList.add("show");b.disabled=false;}
+  return false;
+}
+function show(){
+  document.getElementById("lookupBox").style.display="none";
+  document.getElementById("dash").style.display="block";
+  render(D); loadUpcoming();
+  var se=document.getElementById("subEmail"); if(se&&D&&D.email)se.value=D.email;
+}
+function render(d){
+  applyLang();
+  document.getElementById("who").textContent=d.name||"My tickets";
+  document.getElementById("whoEmail").textContent=d.email;
+  document.getElementById("tix").innerHTML=(d.tickets||[]).map(function(t,i){
+    var code=t.code||t.ticket_no||("PLG"+i);
+    return '<div class="tik">'+(t.image?('<img class="img" src="'+t.image+'" alt="" loading="lazy">'):'<div class="img"></div>')
+      +'<div class="bd"><div class="ev">'+t.event+'</div>'
+      +'<div class="meta">🗓️ '+(t.date||"")+(t.time?(" · "+t.time):"")+'<br>📍 '+(t.venue||"")
+      +'<br>🎫 '+(t.type||"Ticket")+(t.ticket_no?(' · #'+t.ticket_no):'')+'</div>'
+      +(t.checked_in?'<span class="pill in" style="margin-right:8px">'+I18N[L].checked+'</span>':'')
+      +'<button class="qr" onclick="toggleQR('+i+',this)">📱 '+I18N[L].showQR+'</button>'
+      +'<button class="qr act" onclick="emailTicket('+i+',this)" title="'+I18N[L].emailTix+'">✉️ '+I18N[L].emailTix+'</button>'
+      +'<button class="qr act" onclick="printTicket('+i+')" title="'+I18N[L].printTix+'">🖨️ '+I18N[L].printTix+'</button>'
+      +'<div class="qrbox" id="qrb'+i+'"><div class="qrimg" id="qri'+i+'"></div>'
+      +'<div class="code">'+code+'</div><div class="note">'+I18N[L].qrNote+'</div></div>'
+      +'<div class="invite"><b>'+I18N[L].invite+'</b> '+shareRow(t)+'</div>'
+      +'</div></div>';}).join("")
+    ||'<p style="color:var(--muted)">—</p>';
+  document.getElementById("ordT").innerHTML="<tr><th>#</th><th>Date</th><th>Items</th><th>Total</th><th>Status</th></tr>"
+    +(d.orders||[]).map(function(o){return "<tr><td>#"+o.no+"</td><td>"+o.date+"</td><td>"+o.items+"</td><td>"+o.total+"</td><td>"+o.status+"</td></tr>";}).join("");
+}
+function toggleQR(i,btn){
+  var box=document.getElementById("qrb"+i);
+  var on=box.classList.toggle("show");
+  btn.textContent=on?("📱 "+I18N[L].hideQR):("📱 "+I18N[L].showQR);
+  var holder=document.getElementById("qri"+i);
+  if(on&&!holder.hasChildNodes()){
+    var t=(D.tickets||[])[i]||{};
+    var code=t.code||t.ticket_no||("PLG"+i);
+    new QRCode(holder,{text:"PLUGSVC:"+code,width:150,height:150,colorDark:"#1A1230",colorLight:"#ffffff"});
+  }
+}
+function makeQRData(code,cb){
+  var tmp=document.createElement("div");tmp.style.cssText="position:absolute;left:-9999px";document.body.appendChild(tmp);
+  new QRCode(tmp,{text:"PLUGSVC:"+code,width:220,height:220,colorDark:"#1A1230",colorLight:"#ffffff"});
+  setTimeout(function(){
+    var img=tmp.querySelector("img"),cv=tmp.querySelector("canvas");
+    var data=(img&&img.src)?img.src:(cv?cv.toDataURL("image/png"):"");
+    document.body.removeChild(tmp);cb(data);
+  },200);
+}
+function printTicket(i){
+  var t=(D.tickets||[])[i]||{};
+  var code=t.code||t.ticket_no||("PLG"+i);
+  makeQRData(code,function(qr){
+    var w=window.open("","_blank","width=440,height=680");
+    if(!w){return;}
+    var LOGO="https://tickets.plugservices.ca/wp-content/uploads/2024/04/cropped-PHOTO-2024-04-03-10-37-57_1-270x270.jpg";
+    w.document.write('<!DOCTYPE html><html><head><title>PlugServices Ticket — '+(t.event||"")+'</title>'
+      +'<style>body{font-family:Arial,sans-serif;margin:0;padding:24px;color:#1A1230}'
+      +'.tk{max-width:380px;margin:0 auto;border:2px solid #4C2A86;border-radius:16px;overflow:hidden}'
+      +'.hd{background:#4C2A86;color:#fff;padding:12px 18px;font-weight:800;font-size:17px;display:flex;align-items:center;gap:10px}'
+      +'.hd img{width:34px;height:34px;border-radius:8px;display:block}.hd span{color:#F5A623}.hd small{margin-left:auto;font-size:10px;letter-spacing:1px;font-weight:800;color:#E4D9F5}'
+      +'.evimg{width:100%;height:130px;object-fit:cover;display:block}'
+      +'.bd{padding:18px}.ev{font-size:19px;font-weight:800;color:#4C2A86;margin:0 0 8px}'
+      +'.mt{font-size:13.5px;line-height:1.8;color:#333}.qrw{text-align:center;margin:16px 0 6px}'
+      +'.qrw img{width:220px;height:220px;border:1px solid #ddd;border-radius:10px;padding:8px}'
+      +'.cd{text-align:center;font-weight:800;letter-spacing:2px;font-size:15px;margin:6px 0 2px}'
+      +'.nt{text-align:center;font-size:11px;color:#777;margin-bottom:8px}'
+      +'.ft{background:#FFF8F0;padding:10px 18px;font-size:11px;color:#6B6480;text-align:center}'
+      +'@media print{body{padding:0}.tk{border-width:1.5px}}'
+      +'</style></head><body>'
+      +'<div class="tk"><div class="hd"><img src="'+LOGO+'" alt="PlugServices logo">Plug<span>Services</span><small>E-TICKET</small></div>'
+      +(t.image?('<img class="evimg" src="'+t.image+'" alt="'+(t.event||"Event")+'">'):'')
+      +'<div class="bd">'
+      +'<div class="ev">'+(t.event||"")+'</div>'
+      +'<div class="mt">👤 <b>'+(t.attendee||"")+'</b><br>🎫 '+(t.type||"Ticket")+(t.ticket_no?(' · #'+t.ticket_no):'')
+      +'<br>🗓️ '+(t.date||"")+(t.time?(" · "+t.time):"")+'<br>📍 '+(t.venue||"")+'</div>'
+      +'<div class="qrw"><img src="'+qr+'" alt="QR code"></div>'
+      +'<div class="cd">'+code+'</div><div class="nt">'+I18N[L].qrNote+'</div>'
+      +'</div><div class="ft">Every African Event, One Platform. PlugServices.Ca · tickets.plugservices.ca</div></div>'
+      +'<scr'+'ipt>window.onload=function(){setTimeout(function(){window.print();},250);};</scr'+'ipt></body></html>');
+    w.document.close();
+  });
+}
+async function emailTicket(i,btn){
+  var t=(D.tickets||[])[i]||{};
+  var code=t.code||t.ticket_no||("PLG"+i);
+  var orig=btn.textContent;btn.disabled=true;btn.textContent="✉️ "+I18N[L].sending;
+  try{
+    var r=await fetch(API+"/portal/email-ticket",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({email:D.email,code:code})});
+    var ok=false;try{var j=await r.json();ok=r.ok&&j&&j.ok;}catch(e){}
+    btn.textContent=ok?("✉️ "+I18N[L].sentOk):("✉️ "+(r.status===404?I18N[L].soon:I18N[L].sendFail));
+    if(!ok){btn.disabled=false;setTimeout(function(){btn.textContent=orig;},4000);}
+  }catch(e){btn.textContent="✉️ "+I18N[L].sendFail;btn.disabled=false;setTimeout(function(){btn.textContent=orig;},4000);}
+}
+async function loadUpcoming(){
+  try{
+    var r=await fetch("https://tickets.plugservices.ca/wp-json/wp/v2/mep_events?per_page=40&_fields=slug,title,plug_event&nc="+Date.now());
+    var list=await r.json();var today=new Date().toISOString().slice(0,10);
+    var up=list.filter(function(e){var p=e.plug_event||{};return (p.event_start_date||"")>=today;})
+      .sort(function(a,b){return (a.plug_event.event_start_date||"").localeCompare(b.plug_event.event_start_date||"");}).slice(0,6);
+    document.getElementById("up").innerHTML=up.map(function(e){var p=e.plug_event||{};
+      return '<div class="tik">'+(p.thumb?('<img class="img" src="'+p.thumb+'" alt="" loading="lazy">'):'<div class="img"></div>')
+        +'<div class="bd"><div class="ev">'+((e.title&&e.title.rendered)||e.slug)+'</div>'
+        +'<div class="meta">🗓️ '+(p.event_start_date||"")+'<br>📍 '+((p.mep_location_venue||"")+(p.mep_city?(", "+p.mep_city):""))+'</div>'
+        +'<a class="qr get" href="'+(p.link||"https://plugservices.ca/events.html")+'" target="_blank" rel="noopener">🎟️ '+I18N[L].getTix+'</a></div></div>';}).join("");
+  }catch(e){}
+}
+async function doSub(ev){
+  ev.preventDefault();
+  var b=document.getElementById("subBtn");b.disabled=true;
+  try{
+    await fetch(API+"/subscribe",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({email:document.getElementById("subEmail").value})});
+    b.textContent=I18N[L].subDone;
+    var se=document.getElementById("subEmail"); if(se) se.style.display="none";
+    b.style.cursor="default"; b.onclick=function(){return false;};
+  }catch(e){b.disabled=false;}
+  return false;
+}
+function shareRow(t){
+  var link=t.event_link||"https://plugservices.ca";
+  var u=encodeURIComponent(link);
+  var msg=encodeURIComponent((L==="fr"?"Je vais à ":"I am going to ")+(t.event||"this event")+"! 🎉 "+link);
+  var I=window.PSICONS;
+  return '<a class="shb" title="Facebook" href="https://www.facebook.com/sharer/sharer.php?u='+u+'" target="_blank" rel="noopener">'+I.fb+'</a>'
+    +'<a class="shb" title="Messenger (mobile)" href="fb-messenger://share/?link='+u+'">'+I.ms+'</a>'
+    +'<a class="shb" title="WhatsApp" href="https://wa.me/?text='+msg+'" target="_blank" rel="noopener">'+I.wa+'</a>'
+    +'<a class="shb" title="Telegram" href="https://t.me/share/url?url='+u+'&text='+encodeURIComponent(t.event||"")+'" target="_blank" rel="noopener">'+I.tg+'</a>'
+    +'<a class="shb" title="X / Twitter" href="https://twitter.com/intent/tweet?text='+msg+'" target="_blank" rel="noopener">'+I.x+'</a>'
+    +'<a class="shb" title="Email" href="mailto:?subject='+encodeURIComponent(t.event||"Event")+'&body='+msg+'">'+I.em+'</a>'
+    +'<button class="shb" title="Copy link (Instagram, TikTok, Snapchat)" onclick="copyLink(&quot;'+String(link).replace(/"/g,"")+'&quot;,this)">'+I.ln+'</button>';
+}
+function copyLink(u,btn){
+  (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){btn.textContent="✅";setTimeout(function(){btn.textContent="🔗";},1600);},function(){prompt("Copy link:",u);});
+}
+applyLang();
+</script>
+<div class="foot"><div class="psoc"><a class="fb" href="https://www.facebook.com/profile.php?id=61577020693349" target="_blank" rel="noopener" aria-label="PlugServices on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.96h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg></a><a class="ig" href="https://instagram.com/plugevents_canada" target="_blank" rel="noopener" aria-label="PlugServices on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16M12 0C8.74 0 8.33.01 7.05.07c-1.28.06-2.15.26-2.91.56-.79.31-1.46.72-2.13 1.38C1.35 2.68.94 3.35.63 4.14c-.3.76-.5 1.63-.56 2.91C.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.28.26 2.15.56 2.91.31.79.72 1.46 1.38 2.13.67.66 1.34 1.07 2.13 1.38.76.3 1.63.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.28-.06 2.15-.26 2.91-.56.79-.31 1.46-.72 2.13-1.38.66-.67 1.07-1.34 1.38-2.13.3-.76.5-1.63.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.28-.26-2.15-.56-2.91-.31-.79-.72-1.46-1.38-2.13C21.32 1.35 20.65.94 19.86.63c-.76-.3-1.63-.5-2.91-.56C15.67.01 15.26 0 12 0z"/><path d="M12 5.84A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84zm0 10.16A4 4 0 1 1 16 12a4 4 0 0 1-4 4z"/><circle cx="18.41" cy="5.59" r="1.44"/></svg></a><a class="wa" href="https://whatsapp.com/channel/0029VbDlqhl9Gv7QmtEp7i3f" target="_blank" rel="noopener" aria-label="PlugServices WhatsApp Channel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.64-2.05-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.6-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.01-1.04 2.47s1.06 2.86 1.21 3.06c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.28.17-1.41-.07-.13-.27-.2-.57-.35z"/><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.28-1.38a9.87 9.87 0 0 0 4.75 1.21h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm0 18.13c-1.5 0-2.98-.4-4.27-1.17l-.31-.18-3.17.83.85-3.09-.2-.32a8.2 8.2 0 0 1-1.26-4.39c0-4.54 3.7-8.23 8.24-8.23a8.2 8.2 0 0 1 5.83 2.41 8.17 8.17 0 0 1 2.41 5.82c0 4.54-3.7 8.32-8.12 8.32z"/></svg></a></div><span translate="no">PlugServices</span> is an event promotion platform managed by <b translate="no">Plug Trading Services Inc.</b><br>
+<a href="https://plugservices.ca">plugservices.ca</a> · <a href="mailto:hello@plugservices.ca">hello@plugservices.ca</a><br>© 2026 Plug Trading Services Inc. All rights reserved.</div>
+
+<script>
+/* v60.1: guarantee every visible field is >=16px on phones. A 15px input was
+   winning the specificity fight and iOS zooms the whole page below 16px. */
+(function(){
+  function enforce(){
+    if(window.innerWidth>900) return;
+    document.querySelectorAll('input,select,textarea').forEach(function(e){
+      var t=(e.getAttribute('type')||'').toLowerCase();
+      if(t==='checkbox'||t==='radio'||t==='hidden') return;
+      if(parseFloat(getComputedStyle(e).fontSize) < 16) e.style.setProperty('font-size','16px','important');
+    });
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',enforce);}else{enforce();}
+  window.addEventListener('resize',enforce);
+  setTimeout(enforce,1200); setTimeout(enforce,3000);
+  new MutationObserver(enforce).observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
+</body>
+</html>

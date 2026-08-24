@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sell Tickets to Your African Event | PlugServices Organizers</title>
+<meta name="description" content="List your event free with 0% fee per ticket and reach the African diaspora across Canada & USA. Promotion, bilingual marketing and fast payouts included.">
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="https://tickets.plugservices.ca/wp-content/uploads/2024/04/cropped-PHOTO-2024-04-03-10-37-57_1-270x270.jpg">
+<link rel="canonical" href="https://plugservices.ca/submit-event.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PlugServices">
+<meta property="og:title" content="Sell Tickets to Your African Event | PlugServices Organizers">
+<meta property="og:description" content="List your event free with 0% fee per ticket and reach the African diaspora across Canada & USA. Promotion, bilingual marketing and fast payouts included.">
+<meta property="og:url" content="https://plugservices.ca/submit-event.html">
+<meta property="og:image" content="https://tickets.plugservices.ca/wp-content/uploads/2024/04/cropped-PHOTO-2024-04-03-10-37-57_1-270x270.jpg">
+<meta property="og:locale" content="en_CA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Sell Tickets to Your African Event | PlugServices Organizers">
+<meta name="twitter:description" content="List your event free with 0% fee per ticket and reach the African diaspora across Canada & USA. Promotion, bilingual marketing and fast payouts included.">
+<meta name="twitter:image" content="https://tickets.plugservices.ca/wp-content/uploads/2024/04/cropped-PHOTO-2024-04-03-10-37-57_1-270x270.jpg">
+</head>
+<body data-active="submit">
+<div id="site-header"></div>
+
+<div class="phead"><div class="wrap">
+  <div class="crumb"><a href='/'>Home</a> / Sell Tickets</div>
+  <h1>List your event. Sell your tickets.</h1>
+  <p>Free to list — 0% fee per ticket (bank processing fees may apply). Reach the African diaspora across Canada &amp; USA with bilingual promotion, and get paid within 5 business days of your event. Submit below and your event goes live automatically — no approval needed.</p>
+</div></div>
+
+<section style="padding-top:30px">
+  <div class="wrap">
+    <div class="band" style="margin-bottom:26px;text-align:center">
+      <div class="stats" style="justify-content:center">
+        <div><b id="liveEventCount">20+</b><span>events live now</span></div>
+        <div><b>10+</b><span>cities</span></div>
+        <div><b>0%</b><span>platform fee</span></div>
+        <div><b>EN / FR</b><span>bilingual reach</span></div>
+      </div>
+      <p style="margin:14px auto 0;max-width:640px">Organizers from Toronto, Calgary, Edmonton, Ottawa and Vancouver/Surrey are already selling with us. Bank processing fees may apply.</p>
+    </div>
+    <div class="subscribe" style="margin-bottom:26px;background:linear-gradient(135deg,#1F9D6B,#177a53)">
+      <div>
+        <h3>Already listed an event with us?</h3>
+        <p>Sign in to your organizer dashboard to see <b>tickets sold</b>, <b>who bought them</b>, your <b>payout balance</b>, and to <b>check guests in</b> at the door.</p>
+      </div>
+      <div><a class="btn btn-flame" href="https://tickets.plugservices.ca/wp-admin/" target="_blank" rel="noopener">🔑 Organizer Login</a></div>
+    </div>
+
+    <div class="values" style="margin-bottom:30px">
+      <div class="value"><div class="emo">📝</div><h4>1. Submit</h4><p>Tell us about your event and ticket tiers using the form below.</p></div>
+      <div class="value"><div class="emo">⚡</div><h4>2. Publishes instantly</h4><p>Your event goes live automatically — no approval needed — with its own page &amp; gallery.</p></div>
+      <div class="value"><div class="emo">💸</div><h4>3. Sell &amp; get paid</h4><p>0% platform fee (bank processing fees may apply). Tickets sell online; you get QR check-in and fast Stripe payouts.</p></div>
+    </div>
+
+    <form action='/submit-thanks' class='form' enctype='multipart/form-data' method='POST' name='event-submission'>
+      <input type="hidden" name="form-name" value="event-submission">
+      <p hidden aria-hidden="true"><label>Leave this field empty: <input name="bot-field"></label></p>
+      <h3 style="margin-bottom:6px">Organizer &amp; event details</h3>
+      <div class="row">
+        <div><label>Organizer / company name</label><input required name="organizer" placeholder="Pont Cultural Bridge"></div>
+        <div><label>Contact email</label><input required type="email" name="email" placeholder="you@email.com"></div>
+      </div>
+      <label>Event title</label><input required name="event-title" placeholder="Festival Rire d'Afrique — Calgary">
+      <div class="row">
+        <div><label>City <span style="color:var(--flame)">*</span></label>
+          <select name="city" required onchange="plugCityChange(this)">
+            <option value="">Choose a city…</option>
+            <optgroup label="Canada"><option>Calgary</option><option>Edmonton</option><option>Ottawa</option><option>Toronto (incl. GTA)</option><option>Vancouver (incl. Surrey &amp; Metro)</option><option>Montréal</option></optgroup>
+            <optgroup label="USA"><option>New York City</option><option>Atlanta</option><option>Houston</option><option>Denver</option><option>Las Vegas</option></optgroup>
+            <optgroup label="Online"><option value="Online">🌐 Online / Virtual event</option></optgroup>
+            <optgroup label="Other"><option>Other — my city is not listed</option></optgroup>
+          </select>
+          <p class="hint" style="margin-top:4px">Suburbs are grouped: Surrey, Burnaby &amp; Richmond show under Vancouver; Mississauga &amp; North York under Toronto. City not listed? Choose &ldquo;Other&rdquo; and type it below — it gets its own city filter on the site.</p></div>
+        <div id="otherCityBox" style="display:none"><label>Your city &amp; province / country <span style="color:var(--flame)">*</span></label>
+          <input name="city-other" placeholder="Red Deer, AB — or Banjul, The Gambia">
+          <p class="hint" style="margin-top:4px">Exactly as it should appear on your event page.</p></div>
+      </div>
+      <div class="row" id="venueRow">
+        <div><label>Venue name <span style="color:var(--flame)">*</span></label><input name="venue" required placeholder="Mosaic Convention Centre"></div>
+        <div><label>Street address <span style="color:var(--flame)">*</span></label><input name="address" required placeholder="2465 St Laurent Blvd, Ottawa, ON K1G 6C3"></div>
+      </div>
+      <div id="onlineHint" style="display:none" class="hint">🌐 Online event — no venue needed. Put the join link (Zoom, Meet, livestream…) in the description or the video field; ticket buyers receive it with their confirmation.</div>
+      <label>Category <span style="color:var(--flame)">*</span> <span style="font-weight:600;color:var(--muted)">(pick the ONE that fits best)</span></label>
+      <select name="category" required>
+        <option value="">Choose one category…</option>
+        <option>Concert</option><option>Party</option><option>Comedy</option><option>Festival</option>
+        <option>Conference</option><option>National Day</option><option>Gala</option>
+        <option>Brunch / Family</option><option>Gospel</option><option>Food &amp; Business</option><option>Training</option><option>Camp</option><option>Online Event</option>
+      </select>
+      <p class="hint" style="margin-top:4px">One category keeps your listing easy to find. Extra detail goes in the description.</p>
+      <div class="row">
+        <div><label>Start date</label><input type="date" name="event-date" required></div>
+        <div><label>Start time</label><input type="time" name="start-time"></div>
+      </div>
+      <div class="row">
+        <div><label>End date</label><input type="date" name="event-end-date"></div>
+        <div><label>End time</label><input type="time" name="end-time"></div>
+      </div>
+      <div><label>Event time zone <span style="color:var(--flame)">*</span></label>
+        <select name="time-zone" id="tzSelect" required>
+          <option value="">Choose the time zone…</option>
+          <option value="America/Edmonton">Mountain Time — Alberta (Calgary, Edmonton)</option>
+          <option value="America/Toronto">Eastern Time — Ontario &amp; Québec (Ottawa, Toronto, Montréal)</option>
+          <option value="America/Vancouver">Pacific Time — BC (Vancouver)</option>
+          <option value="America/Winnipeg">Central Time — Manitoba (Winnipeg)</option>
+          <option value="America/Regina">Saskatchewan (no DST)</option>
+          <option value="America/Halifax">Atlantic Time — NS/NB (Halifax, Moncton)</option>
+          <option value="America/Denver">Mountain Time — USA (Denver)</option>
+          <option value="America/New_York">Eastern Time — USA (New York, Atlanta)</option>
+          <option value="Africa/Douala">West/Central Africa (Douala, Yaoundé, Lagos)</option>
+          <option value="Africa/Nairobi">East Africa (Nairobi, Addis-Abeba)</option>
+        </select>
+        <p class="hint" style="margin-top:4px">Your event's times are always shown to buyers in this zone — picked automatically from your city, change it if needed (e.g. online events).</p></div>
+      <label>Ticket types, prices &amp; quantities <span style="color:var(--flame)">*</span></label><textarea name="ticket-tiers" required placeholder="Early Bird $40 x100&#10;General $55 x200&#10;VIP Table $450 x10"></textarea>
+      <p class="hint">One ticket type per line: <b>Name $Price xQuantity</b> — e.g. “General $25 x150”. No quantity = unlimited.</p>
+      <label>Event description (EN / FR)</label>
+      <div id="rtBar" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">
+        <button type="button" onclick="rtCmd('bold')" style="font-weight:900;min-width:36px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:pointer">B</button>
+        <button type="button" onclick="rtCmd('italic')" style="font-style:italic;min-width:36px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:pointer">I</button>
+        <button type="button" onclick="rtCmd('underline')" style="text-decoration:underline;min-width:36px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:pointer">U</button>
+        <button type="button" onclick="rtCmd('insertUnorderedList')" style="min-width:36px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:pointer">• List</button>
+        <select onchange="if(this.value){rtSize(this.value);this.selectedIndex=0}" style="padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:pointer">
+          <option value="">Text size…</option><option value="2">Small</option><option value="3">Normal</option><option value="5">Large</option><option value="6">Extra large</option>
+        </select>
+      </div>
+      <div id="rtEditor" contenteditable="true" style="min-height:130px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#fff;line-height:1.55" data-placeholder="Describe your event, lineup, dress code…"></div>
+      <textarea name="description" id="descField" style="display:none"></textarea>
+      <label>Event promo video (optional)</label><input type="url" name="video-url" inputmode="url" placeholder="Paste a YouTube, Vimeo, TikTok or Instagram link">
+      <p class="hint">🎥 Paste a link to your promo video (YouTube, Vimeo, TikTok, Instagram) — it plays right on your event page. Any length, any size. (For a video file, upload it to YouTube first, then paste the link.)</p>
+      <label>Event poster / flyer <span style="color:var(--flame)">*</span></label><input type="file" name="poster" accept="image/*" required>
+      <p class="hint">Required. Best results: <b>square (1080&times;1080) or portrait (1080&times;1350) JPG/PNG, under 5&nbsp;MB</b>. This becomes your event card everywhere on the site.</p>
+      <label>Gallery photo 1 (for the photo gallery)</label><input type="file" name="gallery-photo-1" accept="image/*">
+      <label>Gallery photo 2</label><input type="file" name="gallery-photo-2" accept="image/*">
+      <label>Gallery photo 3</label><input type="file" name="gallery-photo-3" accept="image/*">
+      <label>Gallery photo 4</label><input type="file" name="gallery-photo-4" accept="image/*">
+      <p class="hint">Upload your poster and past-event photos — these build your event page and gallery.</p>
+
+            <div><script src='https://www.google.com/recaptcha/api.js'></script>
+<div class='g-recaptcha' data-sitekey='6LdnkKEqAAAAAPvyqoRAmjXxvE6evlb5z-5Ol90Y'></div>
+<noscript>
+  <div>
+  <div style="width: 302px; height: 422px; position: relative;">
+  <div style="width: 302px; height: 422px; position: absolute;">
+  <iframe src="https://www.google.com/recaptcha/api/fallback?k=6LdnkKEqAAAAAPvyqoRAmjXxvE6evlb5z-5Ol90Y" frameborder="0" scrolling="no"
+    style="width: 302px; height:422px; border-style: none;">
+  </iframe>
+  </div>
+  </div>
+  <div style="width: 300px; height: 60px; border-style: none; bottom: 12px; left: 25px; margin: 0px; padding: 0px; right: 25px; background: #f9f9f9; border: 1px solid #c1c1c1; border-radius: 3px;">
+    <textarea id="g-recaptcha-response" name="g-recaptcha-response" class="g-recaptcha-response"
+      style="width: 250px; height: 40px; border: 1px solid #c1c1c1; margin: 10px 25px; padding: 0px; resize: none;" >
+    </textarea>
+  </div>
+  </div>
+</noscript>
+</div>
+      <label class="consent">
+        <input type="checkbox" name="consent-privacy" value="yes" required> I consent to PlugServices (Plug Trading Services Inc.) collecting and using the personal information in this form to create, publish and administer my event listing, in accordance with the <a href='/privacy' style='color:var(--flame);font-weight:700'>Privacy Policy</a> and applicable Canadian privacy law.
+      </label>
+      <label class="consent">
+        <input type="checkbox" name="consent-marketing" value="yes"> I agree to receive emails from PlugServices about my listing, organizer tools, and event promotion opportunities. I can unsubscribe at any time.
+      </label>
+      <label class="consent">
+        <input type="checkbox" name="consent-terms" value="yes" required> I agree to the <a href='/privacy#terms' style='color:var(--flame);font-weight:700'>Organizer Terms</a>.
+      </label>
+
+      <button class="btn btn-flame btn-lg" type="submit" style="margin-top:18px">Publish my event</button>
+            <p class="privacy-clause"><b>Privacy notice:</b> The personal information collected in this form is collected by Plug Trading Services Inc. (operating as PlugServices) for the purposes described above and is handled in accordance with applicable Canadian privacy laws. We never sell your data. You may access, correct, or request deletion of your information at any time by contacting <a href="mailto:hello@plugservices.ca">hello@plugservices.ca</a>.</p>
+    </form>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script src="site.js"></script>
+<script>
+/* v43: Online events + rich-text description */
+var PLUG_TZ_MAP=[[/calgary|edmonton|airdrie|red deer|lethbridge/i,'America/Edmonton'],
+ [/ottawa|toronto|montr|gatineau|mississauga|north york|hamilton|qu\u00e9bec|quebec|laval/i,'America/Toronto'],
+ [/vancouver|surrey|burnaby|victoria/i,'America/Vancouver'],
+ [/winnipeg/i,'America/Winnipeg'],[/regina|saskatoon/i,'America/Regina'],
+ [/halifax|moncton/i,'America/Halifax'],
+ [/denver|las vegas/i,'America/Denver'],
+ [/new york|atlanta|houston/i,'America/New_York']];
+function plugCityChange(sel){
+  var tzSel=document.getElementById('tzSelect');
+  if(tzSel && sel && sel.value){
+    for(var i=0;i<PLUG_TZ_MAP.length;i++){ if(PLUG_TZ_MAP[i][0].test(sel.value)){ tzSel.value=PLUG_TZ_MAP[i][1]; break; } }
+  }
+  var v = sel.value;
+  var o = document.getElementById('otherCityBox'); if(o) o.style.display = v.indexOf('Other')===0 ? 'block' : 'none';
+  var online = v === 'Online';
+  var row = document.getElementById('venueRow');
+  var hint = document.getElementById('onlineHint');
+  if(row){ row.style.display = online ? 'none' : ''; }
+  if(hint){ hint.style.display = online ? 'block' : 'none'; }
+  var venue = document.querySelector('[name="venue"]'), addr = document.querySelector('[name="address"]');
+  if(venue && addr){
+    if(online){ venue.required=false; addr.required=false; venue.value='Online'; addr.value='Online'; }
+    else { venue.required=true; addr.required=true; if(venue.value==='Online') venue.value=''; if(addr.value==='Online') addr.value=''; }
+  }
+}
+var __rt = document.getElementById('rtEditor');
+function rtCmd(c){ __rt.focus(); document.execCommand(c, false, null); rtSync(); }
+function rtSize(n){ __rt.focus(); document.execCommand('fontSize', false, n); rtSync(); }
+function rtSync(){
+  var html = __rt.innerHTML
+    .replace(/<font size="2">/g,'<span style="font-size:13px">').replace(/<font size="3">/g,'<span style="font-size:16px">')
+    .replace(/<font size="5">/g,'<span style="font-size:22px">').replace(/<font size="6">/g,'<span style="font-size:28px">')
+    .replace(/<\/font>/g,'</span>');
+  var txt = __rt.textContent.replace(/\s+/g,'');
+  document.getElementById('descField').value = txt ? html : '';
+}
+if(__rt){
+  __rt.addEventListener('input', rtSync);
+  __rt.addEventListener('blur', rtSync);
+  var f = __rt.closest('form'); if(f) f.addEventListener('submit', rtSync);
+  /* placeholder behaviour */
+  var ph = __rt.getAttribute('data-placeholder');
+  function phState(){ if(!__rt.textContent.trim() && !__rt.querySelector('img')){ __rt.style.color='#9a92ab'; if(!__rt.dataset.phOn){ __rt.dataset.phOn='1'; __rt.textContent=ph; } } }
+  __rt.addEventListener('focus', function(){ if(__rt.dataset.phOn){ delete __rt.dataset.phOn; __rt.textContent=''; __rt.style.color=''; } });
+  __rt.addEventListener('blur', function(){ if(!__rt.textContent.trim()){ phState(); } });
+  phState();
+}
+</script>
+</body>
+</html>
