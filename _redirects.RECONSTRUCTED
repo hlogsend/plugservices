@@ -1,0 +1,44 @@
+# ============================================================================
+# RECONSTRUCTED 2026-08-24 from observed live behaviour.
+# THIS IS NOT THE ORIGINAL FILE. The original is not recoverable:
+# Netlify never serves /_redirects, and its API returns only file metadata.
+#
+# Every line below was derived by fetching real URLs and recording what came
+# back. The ROUTING is faithful. The exact original SYNTAX may have differed
+# (Netlify accepts several equivalent forms), and any rule covering a path
+# nobody thought to test is not here.
+#
+# Order matters: specific paths MUST stay above the /* wildcards.
+# ============================================================================
+
+# --- guest.plugservices.ca : forced catch-all -------------------------------
+# Verified: /, /index.html, /events, /about, /login, /tickets, /anything-random
+# and even /portal-organizer.html ALL return "My Tickets | PlugServices".
+# The 200! is required - it overrides a real file of the same name.
+https://guest.plugservices.ca/*        /portal-guest.html        200!
+http://guest.plugservices.ca/*         /portal-guest.html        200!
+
+# --- organizer.plugservices.ca : one specific path, then catch-all ----------
+# Verified: /register returns "Register as an Organizer";
+# /, /login, /events, /anything-random and /portal-guest.html all return
+# "Organizer Portal". /register MUST precede the wildcard.
+https://organizer.plugservices.ca/register   /organizer-register.html   200!
+http://organizer.plugservices.ca/register    /organizer-register.html   200!
+https://organizer.plugservices.ca/*          /portal-organizer.html     200!
+http://organizer.plugservices.ca/*           /portal-organizer.html     200!
+
+# --- apex / www friendly paths ---------------------------------------------
+# Verified on plugservices.ca:
+#   /guest-login      -> "My Tickets | PlugServices"
+#   /organizer-login  -> "Organizer Portal | PlugServices"
+/guest-login       /portal-guest.html        200
+/organizer-login   /portal-organizer.html    200
+
+# --- confirmed NOT routed (returned 404 on the apex) ------------------------
+#   /register   /my-tickets   /checkin   /guest
+# checkin.plugservices.ca has no DNS yet - see the project's open items.
+#
+# --- NOT a redirect rule ---------------------------------------------------
+# Extensionless URLs (/events, /about, /city-calgary, /submit-event ...) work
+# through Netlify's built-in Pretty URLs post-processing, not through this
+# file. Both /events and /events.html return 200.

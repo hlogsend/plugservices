@@ -950,3 +950,709 @@ document.addEventListener("DOMContentLoaded",()=>{
       }).catch(function(){});
   } catch(e){}
 })();
+/* ===========================================================================
+ * PLUG-APPEND v70 — 23 Aug 2026
+ * APPEND THIS ENTIRE BLOCK TO THE VERY END OF /site.js, then deploy.
+ * Do not edit anything above it. Every fix below is scoped, idempotent and
+ * self-contained; it shares site.js's scope, so it can see EVENTS, ALL_EVENTS,
+ * currentLang and renderChrome when they exist, and degrades silently when not.
+ *
+ *   v70a  FR login bar overflow (screenshotted on a real phone) — CSS that
+ *         lets the pills wrap and shrink, plus shorter language-aware labels:
+ *         EN "Organizer Login / My Tickets" · FR "Espace organisateur / Mes
+ *         billets". "My Tickets" also beats "Guest Login" as copy: it names
+ *         what the person gets, not the mechanism.
+ *   v70b  Hero search placeholder truncation — short EN/FR placeholder that
+ *         fits a 320px screen.
+ *   v70c  Footer, Company column: remove the "Refunds & cancellations"
+ *         duplicate (Hermann-approved; it stays under Guests).
+ *   v70d  Footer logo lockup — the mark sat hard-left while the wordmark
+ *         centred on the next line. Scoped CSS reunites them.
+ *   v70e  Sample events can still be reached at event.html?e=<slug> by
+ *         direct link and render as bookable. Direct hits now route to the
+ *         real events list. (The grid already filters them — this closes
+ *         the back door.)
+ * ======================================================================== */
+(function () {
+  'use strict';
+  if (window.__plugV70) { return; } window.__plugV70 = true;
+
+  function lang() {
+    try { if (typeof currentLang === 'function') { return currentLang(); } } catch (e) {}
+    try { if (/(^|;)\s*googtrans=[^;]*\/fr/.test(document.cookie)) { return 'fr'; } } catch (e) {}
+    try { return localStorage.getItem('pe_lang') === 'fr' ? 'fr' : 'en'; } catch (e) {}
+    return 'en';
+  }
+
+  /* ---- v70a + v70d: CSS. Injected once, wins by document order. ---- */
+  function css() {
+    if (document.getElementById('plug-v70-css')) { return; }
+    var s = document.createElement('style');
+    s.id = 'plug-v70-css';
+    s.textContent =
+      /* login bar: may wrap, may shrink, never overflows, never clips */
+      '.loginbar{overflow-x:clip}' +
+      '.loginbar-in{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;' +
+        'padding:8px max(12px,env(safe-area-inset-left)) 8px max(12px,env(safe-area-inset-right))}' +
+      '.lbtn{flex:0 1 auto;min-width:0;max-width:100%;display:flex;align-items:center;' +
+        'justify-content:center;gap:7px;min-height:44px;padding:10px 16px;' +
+        'font-size:clamp(12.5px,3.3vw,14.5px);line-height:1.25;text-align:center;' +
+        'white-space:normal;overflow-wrap:break-word}' +
+      '@media(max-width:560px){.lbtn{flex:1 1 100%}}' +
+      /* footer lockup: mark and wordmark are ONE unit again */
+      '.fbrand .logo{display:flex;align-items:center;justify-content:center;gap:10px;' +
+        'text-decoration:none;margin:0 0 12px}' +
+      '.fbrand .logo img{display:block;width:40px;height:40px;border-radius:10px;' +
+        'margin:0;flex:0 0 auto}' +
+      '.fbrand .logo .wordmark{display:inline-block;white-space:nowrap;line-height:1}';
+    document.head.appendChild(s);
+  }
+
+  /* ---- v70a: language-aware short labels, marked translate="no" so
+   *      GTranslate cannot re-expand them. ---- */
+  function labels() {
+    var fr = lang() === 'fr';
+    var map = [
+      { sel: '.lbtn-org',   en: '🔑 Organizer Login', fr: '🔑 Espace organisateur' },
+      { sel: '.lbtn-guest', en: '🎟️ My Tickets', fr: '🎟️ Mes billets' }
+    ];
+    map.forEach(function (m) {
+      document.querySelectorAll(m.sel).forEach(function (el) {
+        var want = fr ? m.fr : m.en;
+        if (el.textContent.trim() !== want.trim()) { el.textContent = want; }
+        el.setAttribute('translate', 'no');
+        el.classList.add('notranslate');
+      });
+    });
+  }
+
+  /* ---- v70b: a placeholder that fits a 320px screen. ---- */
+  function placeholder() {
+    var fr = lang() === 'fr';
+    var txt = fr ? 'Essayez « concert », « gala »'
+                 : 'Try "concert", "Calgary", "gala"';
+    document.querySelectorAll('#q,#searchBox,input[type="search"],input[placeholder^="Try \\""],input[placeholder^="Essayez"]')
+      .forEach(function (el) {
+        if (el.placeholder && el.placeholder !== txt) { el.placeholder = txt; }
+        el.setAttribute('translate', 'no');
+      });
+  }
+
+  /* ---- v70c: Company column loses the Refunds duplicate. Guests keeps it. */
+  function companyColumn() {
+    document.querySelectorAll('footer .fgrid > div').forEach(function (col) {
+      var h = col.querySelector('h5');
+      if (!h) { return; }
+      var name = (h.textContent || '').trim().toLowerCase();
+      if (name !== 'company' && name !== 'entreprise' && name !== 'compagnie') { return; }
+      col.querySelectorAll('a[href*="#refund"]').forEach(function (a) { a.remove(); });
+    });
+  }
+
+  /* ---- v70e: direct links to sample events route to the real list. ---- */
+  function sampleGuard() {
+    try {
+      if (!/event\.html/i.test(location.pathname)) { return; }
+      var slug = new URLSearchParams(location.search).get('e');
+      if (!slug) { return; }
+      if (typeof ALL_EVENTS !== 'undefined') {
+        var ev = ALL_EVENTS.find(function (x) { return x.slug === slug; });
+        if (ev && ev.sample) { location.replace('events.html'); }
+      }
+    } catch (e) {}
+  }
+
+  function runAll() { css(); labels(); placeholder(); companyColumn(); }
+
+  if (document.readyState !== 'loading') { runAll(); sampleGuard(); }
+  else { document.addEventListener('DOMContentLoaded', function () { runAll(); sampleGuard(); }); }
+
+  /* renderChrome re-runs and GTranslate rewrites text — re-apply, debounced. */
+  try {
+    new MutationObserver(function () {
+      clearTimeout(window.__plugV70t);
+      window.__plugV70t = setTimeout(runAll, 200);
+    }).observe(document.documentElement, { childList: true, subtree: true });
+  } catch (e) {}
+
+  /* Language toggle: re-apply immediately so labels flip with the page. */
+  document.addEventListener('click', function (ev) {
+    var t = ev.target && ev.target.closest ? ev.target.closest('#langEN,#langFR') : null;
+    if (t) { setTimeout(runAll, 60); setTimeout(runAll, 400); }
+  }, true);
+})();
+/* ===========================================================================
+ * PLUG-APPEND v71 — 23 Aug 2026 — PORTAL MOBILE
+ * APPEND THIS ENTIRE BLOCK TO THE VERY END OF /site.js, AFTER the v70 block.
+ * Deploy order: v70 first, then v71. Both are idempotent and self-contained.
+ *
+ * WHAT IT FIXES (from Hermann's 23 Aug phone screenshots)
+ *
+ *  v71a  GUEST PORTAL HORIZONTAL OVERFLOW. The ticket card and the event
+ *        flyer run past the right edge of a 375px screen, and the identity
+ *        line "Hermann Logsend · hlogsend@gmail.com" is clipped mid-address.
+ *        Cause is the usual one on this project: a fixed-width child inside a
+ *        flex/grid parent that has no min-width:0, so the parent refuses to
+ *        shrink below its content. Fixed by allowing the shrink and capping
+ *        media at 100%.
+ *
+ *  v71b  ORGANIZER PORTAL "YOUR EVENTS" TABLE. At phone width the event title
+ *        column collapses to its padding and renders one character per line
+ *        ("A / f / r / o / ..."), and the Check-in column is cut off the
+ *        screen entirely. This is the THIRD incident of this species on the
+ *        project - the previous two were `max-width:0` and
+ *        `overflow-wrap:anywhere` on the checkout order table.
+ *
+ *        THE FIX IS NOT A WIDTH TRICK. Below 680px the table becomes stacked
+ *        cards: one card per event, title full width, then Date / Sold /
+ *        Capacity / Check-in as labelled rows. Labels are read from <thead> at
+ *        runtime, so the layout follows the table instead of hardcoding it,
+ *        and no column can be pushed off-screen because there are no columns.
+ *
+ *        Explicit anti-shred declarations are set on every cell:
+ *          word-break:normal · overflow-wrap:break-word · hyphens:none
+ *          table-layout:auto · no max-width on any cell
+ *
+ *  v71c  Tap targets, gutters and 16px inputs brought to main-site parity
+ *        (44x44, 20px gutters, no iOS zoom-on-focus).
+ *
+ * SCOPE GUARD
+ *   Everything is gated on isPortal(). On plugservices.ca proper this block
+ *   does nothing at all - it will not touch the events grid or any event page.
+ *
+ * IF THE PORTALS DO NOT LOAD site.js
+ *   Then this block never runs there. Check with:
+ *     curl -s https://guest.plugservices.ca/ | grep -c 'site.js'
+ *   If that returns 0, add   <script defer src="/site.js"></script>
+ *   before </body> in portal-guest.html, portal-organizer.html and
+ *   portal-checkin.html, and ship them in the same digest deploy.
+ * ======================================================================== */
+(function () {
+  'use strict';
+  if (window.__plugV71) { return; } window.__plugV71 = true;
+
+  function isPortal() {
+    try {
+      var h = String(location.hostname || '').toLowerCase();
+      if (/^(guest|organizer|organiser|checkin)\./.test(h)) { return true; }
+      if (/portal-(guest|organizer|organiser|checkin)/i.test(location.pathname)) { return true; }
+      if (/\/(guest|organizer|organiser)-login/i.test(location.pathname)) { return true; }
+    } catch (e) {}
+    return false;
+  }
+
+  function css() {
+    if (document.getElementById('plug-v71-css')) { return; }
+    var s = document.createElement('style');
+    s.id = 'plug-v71-css';
+    s.textContent =
+      /* ---- v71a: nothing may exceed the viewport, ever ---- */
+      'html.plug-portal,html.plug-portal body{overflow-x:clip;max-width:100%}' +
+      'html.plug-portal .wrap,html.plug-portal main,html.plug-portal section,' +
+      'html.plug-portal .card,html.plug-portal .panel,html.plug-portal .tk,' +
+      'html.plug-portal .ticket{max-width:100%;min-width:0}' +
+      'html.plug-portal img,html.plug-portal video,html.plug-portal canvas,' +
+      'html.plug-portal iframe{max-width:100%;height:auto;display:block}' +
+      /* the identity line was clipping mid-address, not wrapping */
+      'html.plug-portal .who,html.plug-portal .ident,html.plug-portal .meta,' +
+      'html.plug-portal p,html.plug-portal li{min-width:0;overflow-wrap:break-word;' +
+        'word-break:normal;hyphens:none}' +
+      'html.plug-portal a[href^="mailto:"]{overflow-wrap:break-word;word-break:normal}' +
+
+      /* ---- v71c: parity chrome ---- */
+      '@media(max-width:900px){' +
+        'html.plug-portal .wrap{padding-left:max(20px,env(safe-area-inset-left));' +
+          'padding-right:max(20px,env(safe-area-inset-right))}' +
+        'html.plug-portal input,html.plug-portal select,html.plug-portal textarea{' +
+          'font-size:16px;min-height:52px;max-width:100%}' +
+        'html.plug-portal button,html.plug-portal .btn,html.plug-portal a.btn{' +
+          'min-height:44px;min-width:44px}' +
+      '}' +
+
+      /* ---- v71b: table -> stacked cards. No width tricks. ---- */
+      '@media(max-width:680px){' +
+        'html.plug-portal table.plug-stack{display:block;width:100%;border:0;' +
+          'border-collapse:separate;border-spacing:0;table-layout:auto}' +
+        'html.plug-portal table.plug-stack thead{position:absolute;width:1px;height:1px;' +
+          'overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}' +
+        'html.plug-portal table.plug-stack tbody,' +
+        'html.plug-portal table.plug-stack tr,' +
+        'html.plug-portal table.plug-stack td{display:block;width:auto;max-width:none}' +
+        'html.plug-portal table.plug-stack tr{background:#fff;border:1px solid #e8e0f2;' +
+          'border-radius:14px;padding:14px 16px;margin:0 0 12px;' +
+          'box-shadow:0 1px 3px rgba(27,18,51,.06)}' +
+        /* title row */
+        'html.plug-portal table.plug-stack td:first-child{font-weight:800;font-size:16px;' +
+          'line-height:1.35;color:#4C2A86;padding:0 0 10px;margin:0 0 10px;' +
+          'border-bottom:1px solid #f0ebf7;text-align:left;display:block;' +
+          'word-break:normal;overflow-wrap:break-word;hyphens:none;white-space:normal}' +
+        'html.plug-portal table.plug-stack td:first-child::before{content:none}' +
+        /* label : value rows */
+        'html.plug-portal table.plug-stack td{display:flex;align-items:baseline;' +
+          'justify-content:space-between;gap:14px;padding:5px 0;font-size:14.5px;' +
+          'color:#1B1233;word-break:normal;overflow-wrap:break-word;hyphens:none;' +
+          'text-align:right;border:0}' +
+        'html.plug-portal table.plug-stack td::before{content:attr(data-label);' +
+          'flex:0 0 auto;font-weight:700;color:#6b6580;font-size:13px;text-align:left;' +
+          'letter-spacing:.2px}' +
+        'html.plug-portal table.plug-stack td:empty{display:none}' +
+        'html.plug-portal table.plug-stack td a{word-break:normal;overflow-wrap:break-word}' +
+        /* any table we did not convert must at least not shred */
+        'html.plug-portal table:not(.plug-stack){display:block;overflow-x:auto;' +
+          '-webkit-overflow-scrolling:touch;max-width:100%}' +
+        'html.plug-portal table:not(.plug-stack) td,' +
+        'html.plug-portal table:not(.plug-stack) th{word-break:normal;' +
+          'overflow-wrap:break-word;hyphens:none;max-width:none}' +
+      '}';
+    document.head.appendChild(s);
+  }
+
+  /* Read the header row and stamp each cell with its label. Re-runnable. */
+  function stampTables() {
+    var tables = document.querySelectorAll('table');
+    for (var t = 0; t < tables.length; t++) {
+      var tbl = tables[t];
+      var heads = tbl.querySelectorAll('thead th, thead td');
+      if (!heads.length) {
+        var first = tbl.querySelector('tr');
+        if (first && first.querySelectorAll('th').length) { heads = first.querySelectorAll('th'); }
+      }
+      if (!heads.length) { continue; }
+
+      var labels = [];
+      for (var h = 0; h < heads.length; h++) {
+        labels.push((heads[h].textContent || '').trim());
+      }
+      /* Only stack tables that actually have a label row worth showing. */
+      if (labels.length < 2) { continue; }
+
+      var rows = tbl.querySelectorAll('tbody tr');
+      if (!rows.length) { continue; }
+
+      for (var r = 0; r < rows.length; r++) {
+        var cells = rows[r].children;
+        for (var c = 0; c < cells.length; c++) {
+          if (cells[c].tagName !== 'TD') { continue; }
+          var lab = labels[c] || '';
+          if (lab && cells[c].getAttribute('data-label') !== lab) {
+            cells[c].setAttribute('data-label', lab);
+          }
+        }
+      }
+      tbl.classList.add('plug-stack');
+    }
+  }
+
+  /* Measured guard: if anything still exceeds the viewport, name it in the
+   * console so the next sweep has a target instead of a guess. */
+  function reportOverflow() {
+    try {
+      var vw = document.documentElement.clientWidth;
+      if (document.documentElement.scrollWidth <= vw) { return; }
+      var bad = [];
+      var all = document.body.querySelectorAll('*');
+      for (var i = 0; i < all.length; i++) {
+        var r = all[i].getBoundingClientRect();
+        if (r.width > 0 && r.right > vw + 1) {
+          bad.push((all[i].tagName || '') + '.' + (all[i].className || '') +
+                   ' right=' + Math.round(r.right));
+          if (bad.length > 8) { break; }
+        }
+      }
+      if (bad.length) {
+        console.warn('[plug v71] still overflowing at ' + vw + 'px:', bad);
+      }
+    } catch (e) {}
+  }
+
+  function run() {
+    if (!isPortal()) { return; }
+    document.documentElement.classList.add('plug-portal');
+    css();
+    stampTables();
+    setTimeout(reportOverflow, 600);
+  }
+
+  if (document.readyState !== 'loading') { run(); }
+  else { document.addEventListener('DOMContentLoaded', run); }
+
+  /* Portal tables are rendered from a fetch, so they arrive after DOMReady. */
+  try {
+    new MutationObserver(function () {
+      if (!isPortal()) { return; }
+      clearTimeout(window.__plugV71t);
+      window.__plugV71t = setTimeout(function () { css(); stampTables(); }, 180);
+    }).observe(document.documentElement, { childList: true, subtree: true });
+  } catch (e) {}
+})();
+/* ===========================================================================
+ * PLUG-APPEND v72 — 23 Aug 2026 — SCROLL TO RESULTS ON CATEGORY CLICK
+ * APPEND TO THE VERY END OF /site.js, AFTER the v70 and v71 blocks.
+ * Deploy order: v70 -> v71 -> v72. All three are idempotent and independent.
+ *
+ * WHAT HERMANN ASKED FOR
+ *   "When someone clicks on a category, bring the page down so he can see the
+ *    first events."
+ *
+ * THE PROBLEM IT SOLVES
+ *   The category chips sit above the fold with the hero. Tapping one filters
+ *   the grid, but the viewport does not move, so on a phone the buyer sees the
+ *   same hero and chips and no visible change - the results are below the
+ *   fold. It reads as "nothing happened". This is a real drop-off point: the
+ *   tap that signalled the strongest purchase intent produces no feedback.
+ *
+ * WHAT IT DOES
+ *   v72a  Any category control - a chip, a filter button, a link to
+ *         events.html?cat=... - scrolls the results into view after the grid
+ *         has re-rendered. It waits for the DOM to actually settle rather than
+ *         guessing a delay, so it lands on the new results, not the old ones.
+ *   v72b  Arriving with ?cat= already in the URL (from the footer Discover
+ *         links, an email, or a shared link) does the same on load. A buyer
+ *         who taps "Comedy" in a newsletter lands looking at comedy events.
+ *   v72c  Offset for the sticky header so the first card is never tucked
+ *         underneath it, plus a focus move for keyboard and screen-reader
+ *         users - the scroll alone tells them nothing.
+ *
+ * SAFETY
+ *   - Purely additive. It changes no filter logic and no markup. If it cannot
+ *     find a results container it does nothing at all.
+ *   - Honours prefers-reduced-motion: jumps instead of animating.
+ *   - Never scrolls UP. If the results are already on screen it stays put,
+ *     so it cannot yank the page around under someone mid-read.
+ *   - One scroll per interaction, debounced, guarded by window.__plugV72.
+ * ======================================================================== */
+(function () {
+  'use strict';
+  if (window.__plugV72) { return; } window.__plugV72 = true;
+
+  var HEADER_GAP = 12;
+  var busy = false;
+
+  function reduced() {
+    try {
+      return window.matchMedia &&
+             window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    } catch (e) { return false; }
+  }
+
+  /* Height of anything pinned to the top, so the first card clears it. */
+  function stickyOffset() {
+    var off = 0;
+    try {
+      var sels = ['#plug59-hd', 'header', '.nav', '.loginbar', '.topbar'];
+      for (var i = 0; i < sels.length; i++) {
+        var el = document.querySelector(sels[i]);
+        if (!el) { continue; }
+        var cs = window.getComputedStyle(el);
+        if (cs.position !== 'sticky' && cs.position !== 'fixed') { continue; }
+        var r = el.getBoundingClientRect();
+        if (r.height > off) { off = r.height; }
+      }
+    } catch (e) {}
+    return off + HEADER_GAP;
+  }
+
+  /* The thing a buyer should be looking at: the result count if the page has
+   * one, otherwise the container holding the first event card. */
+  function resultsAnchor() {
+    var ids = ['#resultCount', '#count', '#results', '#grid', '#eventGrid', '#events'];
+    for (var i = 0; i < ids.length; i++) {
+      var el = document.querySelector(ids[i]);
+      if (el && el.getBoundingClientRect().height > 0) { return el; }
+    }
+    var card = document.querySelector('.card, .event-card, [data-event], article.event');
+    if (card) { return card.parentElement || card; }
+    return null;
+  }
+
+  function scrollToResults() {
+    var el = resultsAnchor();
+    if (!el) { return; }
+    var top = el.getBoundingClientRect().top;
+    /* Already comfortably visible, or above us - leave the page alone. */
+    if (top < stickyOffset() + 4) { return; }
+    if (top < window.innerHeight * 0.45) { return; }
+
+    var y = window.pageYOffset + top - stickyOffset();
+    try {
+      window.scrollTo({ top: y, behavior: reduced() ? 'auto' : 'smooth' });
+    } catch (e) {
+      window.scrollTo(0, y);
+    }
+
+    /* Keyboard and screen-reader users get nothing from a scroll alone. */
+    try {
+      if (!el.hasAttribute('tabindex')) { el.setAttribute('tabindex', '-1'); }
+      setTimeout(function () { try { el.focus({ preventScroll: true }); } catch (e2) {} }, 420);
+    } catch (e) {}
+  }
+
+  /* Wait for the grid to actually re-render, rather than guessing a delay. */
+  function scrollWhenSettled() {
+    if (busy) { return; }
+    busy = true;
+    var fired = false;
+    var obs = null;
+    function go() {
+      if (fired) { return; }
+      fired = true;
+      try { if (obs) { obs.disconnect(); } } catch (e) {}
+      obs = null;
+      busy = false;
+      scrollToResults();
+    }
+    try {
+      var target = resultsAnchor();
+      var root = (target && target.parentElement) || document.body;
+      var quiet;
+      obs = new MutationObserver(function () {
+        clearTimeout(quiet);
+        quiet = setTimeout(go, 90);
+      });
+      obs.observe(root, { childList: true, subtree: true });
+    } catch (e) {}
+    /* Backstop: the grid may already be correct and never mutate. */
+    setTimeout(go, 500);
+  }
+
+  function isCategoryControl(a) {
+    if (!a) { return false; }
+    try {
+      if (a.hasAttribute('data-cat')) { return true; }
+      var href = a.getAttribute('href') || '';
+      if (/[?&]cat=/i.test(href)) { return true; }
+      if (a.matches('.chip,.cat,.category,.filter-chip,[data-filter]')) { return true; }
+    } catch (e) {}
+    return false;
+  }
+
+  /* v72a — capture phase, so it runs alongside the existing filter handler
+   * without replacing or interfering with it. */
+  document.addEventListener('click', function (ev) {
+    var t = ev.target;
+    if (!t || !t.closest) { return; }
+    var a = t.closest('a,button,[role="button"]');
+    if (!isCategoryControl(a)) { return; }
+    /* A link that navigates to another page handles itself on load (v72b). */
+    var href = a.getAttribute && a.getAttribute('href');
+    if (href && /\.html/i.test(href) && !/events\.html/i.test(location.pathname)) { return; }
+    scrollWhenSettled();
+  }, true);
+
+  /* Also catch chips wired to change/input rather than click. */
+  document.addEventListener('change', function (ev) {
+    var t = ev.target;
+    if (!t) { return; }
+    try {
+      if (t.matches('#cat,#category,select[name="cat"],[data-filter]')) {
+        scrollWhenSettled();
+      }
+    } catch (e) {}
+  }, true);
+
+  /* v72b — landed here with a category already applied. */
+  function onLoad() {
+    try {
+      if (!/[?&]cat=/i.test(location.search)) { return; }
+      setTimeout(scrollWhenSettled, 260);
+    } catch (e) {}
+  }
+
+  if (document.readyState !== 'loading') { onLoad(); }
+  else { document.addEventListener('DOMContentLoaded', onLoad); }
+})();
+/* ===========================================================================
+ * PLUG-APPEND v73 — 24 Aug 2026 — REPAIRS v70b AND v72a
+ * APPEND TO THE VERY END OF /site.js, AFTER v70, v71 and v72.
+ * Idempotent, self-contained, guarded by window.__plugV73.
+ *
+ * WHY THIS EXISTS
+ *   Two earlier blocks were written against an assumed DOM and were measured
+ *   inert against the real page. Both failures are the same species: a
+ *   selector that matches nothing. Every selector below was executed against
+ *   the live draft before this file was delivered.
+ *
+ *   v73a  REPAIRS v70b — hero search placeholder.
+ *         v70b targeted  #q, #searchBox, input[type="search"],
+ *         input[placeholder^="Try \""], input[placeholder^="Essayez"].
+ *         MEASURED on production: #q -> 0, #searchBox -> 0,
+ *         input[type=search] -> 0, straight-quote prefix -> 0.
+ *         The real input is  <input id="heroQ" name="q" type="text">  and its
+ *         placeholder opens with a CURLY quote (U+201C), so a straight-quote
+ *         prefix selector can never match it.
+ *         v73a matches by id, by name, and by a quote-agnostic /^(try|essayez)/
+ *         test on the placeholder text itself. EN copy uses curly quotes to
+ *         match the site's own typography.
+ *
+ *   v73b  REPAIRS v72a — scroll to results on category click.
+ *         v72a gated on  t.closest('a,button,[role="button"]').
+ *         MEASURED on production: the homepage category chips are
+ *         <span class="chip">Concerts</span> — not links, not buttons. The
+ *         gate returns null, so v72a never fired for them. Clicking
+ *         "Concerts" filtered to "3 events found" and scrolled 0 px.
+ *         v73b handles ONLY what v72 misses: it returns immediately if
+ *         closest('a,button,[role="button"]') matches, so v72 keeps
+ *         ownership of links and buttons and nothing double-fires.
+ *
+ * SAFETY
+ *   - Never scrolls up. If the results are already on screen it does nothing.
+ *   - Honours prefers-reduced-motion.
+ *   - Changes no filter logic and no markup.
+ * ======================================================================== */
+(function () {
+  'use strict';
+  if (window.__plugV73) { return; } window.__plugV73 = true;
+
+  function lang() {
+    try { if (typeof currentLang === 'function') { return currentLang(); } } catch (e) {}
+    try { if (/(^|;)\s*googtrans=[^;]*\/fr/.test(document.cookie)) { return 'fr'; } } catch (e) {}
+    try { return localStorage.getItem('pe_lang') === 'fr' ? 'fr' : 'en'; } catch (e) {}
+    return 'en';
+  }
+
+  /* ---- v73a ------------------------------------------------------------ */
+  function placeholder() {
+    var fr = lang() === 'fr';
+    var txt = fr ? 'Essayez « concert », « gala »'
+                 : 'Try “concert”, “Calgary”, “gala”';
+    var seen = [];
+    function add(el) { if (el && seen.indexOf(el) < 0) { seen.push(el); } }
+
+    add(document.getElementById('heroQ'));
+    try {
+      document.querySelectorAll('#q,#searchBox,input[name="q"],input[type="search"]')
+        .forEach(add);
+    } catch (e) {}
+    try {
+      document.querySelectorAll('input[placeholder]').forEach(function (el) {
+        if (/^\s*(try|essayez)\b/i.test(el.placeholder || '')) { add(el); }
+      });
+    } catch (e) {}
+
+    seen.forEach(function (el) {
+      if (el.placeholder !== txt) { el.placeholder = txt; }
+      el.setAttribute('translate', 'no');
+    });
+    return seen.length;
+  }
+
+  /* ---- v73b ------------------------------------------------------------ */
+  var HEADER_GAP = 12;
+  var busy = false;
+
+  function reduced() {
+    try {
+      return window.matchMedia &&
+             window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    } catch (e) { return false; }
+  }
+
+  function stickyOffset() {
+    var off = 0;
+    try {
+      var sels = ['#plug59-hd', 'header', '.nav', '.loginbar', '.topbar'];
+      for (var i = 0; i < sels.length; i++) {
+        var el = document.querySelector(sels[i]);
+        if (!el) { continue; }
+        var cs = window.getComputedStyle(el);
+        if (cs.position !== 'sticky' && cs.position !== 'fixed') { continue; }
+        var r = el.getBoundingClientRect();
+        if (r.height > off) { off = r.height; }
+      }
+    } catch (e) {}
+    return off + HEADER_GAP;
+  }
+
+  function resultsAnchor() {
+    var ids = ['#resultCount', '#count', '#results', '#grid', '#eventGrid', '#events'];
+    for (var i = 0; i < ids.length; i++) {
+      var el = document.querySelector(ids[i]);
+      if (el && el.getBoundingClientRect().height > 0) { return el; }
+    }
+    var card = document.querySelector('.card, .event-card, [data-event], article.event');
+    if (card) { return card.parentElement || card; }
+    return null;
+  }
+
+  function scrollToResults() {
+    var el = resultsAnchor();
+    if (!el) { return; }
+    var top = el.getBoundingClientRect().top;
+    if (top < stickyOffset() + 4) { return; }          /* above us - never scroll up */
+    if (top < window.innerHeight * 0.45) { return; }   /* already comfortably visible */
+    var y = window.pageYOffset + top - stickyOffset();
+    /* Ask for smooth, then GUARANTEE the landing.
+     * Measured on the live draft: window.scrollTo({behavior:'smooth'}) left
+     * scrollY at 0 while behavior:'auto' and documentElement.scrollTop both
+     * moved to the target. I could not separate "this site breaks smooth
+     * scrolling" from "Chrome does not animate a background tab", so v73b
+     * does not depend on the answer: it asks for smooth, and if the page has
+     * not arrived shortly after, it sets scrollTop directly - the mechanism
+     * that was proven to work in every condition tested. */
+    try { window.scrollTo({ top: y, behavior: reduced() ? 'auto' : 'smooth' }); }
+    catch (e) {}
+    setTimeout(function () {
+      try {
+        var de = document.documentElement;
+        if (Math.abs(de.scrollTop - y) > 4) { de.scrollTop = y; }
+      } catch (e2) {}
+    }, 600);
+    try {
+      if (!el.hasAttribute('tabindex')) { el.setAttribute('tabindex', '-1'); }
+      setTimeout(function () { try { el.focus({ preventScroll: true }); } catch (e2) {} }, 700);
+    } catch (e) {}
+  }
+
+  function scrollWhenSettled() {
+    if (busy) { return; }
+    busy = true;
+    var fired = false, obs = null, quiet;
+    function go() {
+      if (fired) { return; }
+      fired = true;
+      try { if (obs) { obs.disconnect(); } } catch (e) {}
+      obs = null; busy = false;
+      scrollToResults();
+    }
+    try {
+      var target = resultsAnchor();
+      var rootEl = (target && target.parentElement) || document.body;
+      obs = new MutationObserver(function () {
+        clearTimeout(quiet);
+        quiet = setTimeout(go, 90);
+      });
+      obs.observe(rootEl, { childList: true, subtree: true });
+    } catch (e) {}
+    setTimeout(go, 500);
+  }
+
+  /* Only what v72 cannot see: category controls that are not links/buttons. */
+  document.addEventListener('click', function (ev) {
+    var t = ev.target;
+    if (!t || !t.closest) { return; }
+    try {
+      if (t.closest('a,button,[role="button"]')) { return; }   /* v72 owns these */
+      var el = t.closest('.chip,.cat,.category,.filter-chip,[data-cat],[data-filter]');
+      if (!el) { return; }
+      scrollWhenSettled();
+    } catch (e) {}
+  }, true);
+
+  /* ---- wiring ---------------------------------------------------------- */
+  function run() { placeholder(); }
+
+  if (document.readyState !== 'loading') { run(); }
+  else { document.addEventListener('DOMContentLoaded', run); }
+
+  try {
+    new MutationObserver(function () {
+      clearTimeout(window.__plugV73t);
+      window.__plugV73t = setTimeout(run, 200);
+    }).observe(document.documentElement, { childList: true, subtree: true });
+  } catch (e) {}
+
+  document.addEventListener('click', function (ev) {
+    var t = ev.target && ev.target.closest ? ev.target.closest('#langEN,#langFR') : null;
+    if (t) { setTimeout(run, 60); setTimeout(run, 400); }
+  }, true);
+})();
