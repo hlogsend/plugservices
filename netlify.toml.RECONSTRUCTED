@@ -1,0 +1,22 @@
+﻿# netlify.toml - RECONSTRUCTED 2026-08-24 18:02
+#
+# The real netlify.toml is in the deploy but Netlify never serves it, and it
+# exists nowhere on the owner's machine. Everything below is DERIVED from
+# GET /api/v1/sites/7546e073-e7c3-4d09-b559-1cdc1c3a4b2f - it reflects the settings currently in effect,
+# NOT necessarily the file that was originally committed.
+#
+# ANY key that was in the original file but is not exposed by the API is
+# MISSING HERE. Treat this as a starting point, not as the original.
+
+[build]
+  command = ""
+  publish = ""
+  base = ""
+  functions = ""
+
+# Post-processing, as reported by the API:
+# {"html":{"pretty_urls":true},"ignore_html_forms":false}
+
+# NOTE: redirects are NOT reproduced here. This site uses a _redirects file,
+# and its true contents are unrecovered. See _redirects.OBSERVED for the
+# measured routing behaviour and _redirects.RECONSTRUCTED for the guess.

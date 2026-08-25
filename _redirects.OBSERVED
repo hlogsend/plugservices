@@ -1,0 +1,52 @@
+﻿# _redirects - EVIDENCE FILE, generated 2026-08-24 18:02
+#
+# The real /_redirects cannot be downloaded - Netlify never serves it.
+# What follows is the OBSERVED behaviour of the live site, host by host,
+# captured with MaximumRedirection 0 so redirects are visible.
+# Use this to confirm or correct _redirects.RECONSTRUCTED by hand.
+#
+# plugservices.ca                /                      -> 200   text/html                17457 
+# plugservices.ca                /index.html            -> 200   text/html                17457 
+# plugservices.ca                /events.html           -> 200   text/html                9128 
+# plugservices.ca                /site.js               -> 200   application/javascript   107274 
+# plugservices.ca                /styles.css            -> 200   text/css                 37646 
+# plugservices.ca                /guest-login           -> 200   text/html                33890 
+# plugservices.ca                /organizer-login       -> 200   text/html                48841 
+# plugservices.ca                /submit-event.html     -> 200   text/html                18245 
+# plugservices.ca                /zzz-does-not-exist    -> 404   text/html                -1 
+# www.plugservices.ca            /                      -> ERR                             
+# www.plugservices.ca            /index.html            -> ERR                             
+# www.plugservices.ca            /events.html           -> ERR                             
+# www.plugservices.ca            /site.js               -> ERR                             
+# www.plugservices.ca            /styles.css            -> ERR                             
+# www.plugservices.ca            /guest-login           -> ERR                             
+# www.plugservices.ca            /organizer-login       -> ERR                             
+# www.plugservices.ca            /submit-event.html     -> ERR                             
+# www.plugservices.ca            /zzz-does-not-exist    -> ERR                             
+# guest.plugservices.ca          /                      -> 200   text/html                33890 
+# guest.plugservices.ca          /index.html            -> 200   text/html                33890 
+# guest.plugservices.ca          /events.html           -> 200   text/html                33890 
+# guest.plugservices.ca          /site.js               -> 200   text/html                33890 
+# guest.plugservices.ca          /styles.css            -> 200   text/html                33890 
+# guest.plugservices.ca          /guest-login           -> 200   text/html                33890 
+# guest.plugservices.ca          /organizer-login       -> 200   text/html                33890 
+# guest.plugservices.ca          /submit-event.html     -> 200   text/html                33890 
+# guest.plugservices.ca          /zzz-does-not-exist    -> 200   text/html                33890 
+# organizer.plugservices.ca      /                      -> 200   text/html                48841 
+# organizer.plugservices.ca      /index.html            -> 200   text/html                48841 
+# organizer.plugservices.ca      /events.html           -> 200   text/html                48841 
+# organizer.plugservices.ca      /site.js               -> 200   text/html                48841 
+# organizer.plugservices.ca      /styles.css            -> 200   text/html                48841 
+# organizer.plugservices.ca      /guest-login           -> 200   text/html                48841 
+# organizer.plugservices.ca      /organizer-login       -> 200   text/html                48841 
+# organizer.plugservices.ca      /submit-event.html     -> 200   text/html                48841 
+# organizer.plugservices.ca      /zzz-does-not-exist    -> 200   text/html                48841 
+# checkin.plugservices.ca        /                      -> ERR                             
+# checkin.plugservices.ca        /index.html            -> ERR                             
+# checkin.plugservices.ca        /events.html           -> ERR                             
+# checkin.plugservices.ca        /site.js               -> ERR                             
+# checkin.plugservices.ca        /styles.css            -> ERR                             
+# checkin.plugservices.ca        /guest-login           -> ERR                             
+# checkin.plugservices.ca        /organizer-login       -> ERR                             
+# checkin.plugservices.ca        /submit-event.html     -> ERR                             
+# checkin.plugservices.ca        /zzz-does-not-exist    -> ERR                             

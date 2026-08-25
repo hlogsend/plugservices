@@ -99,7 +99,7 @@
         <h3>Never miss an event near you</h3>
         <p>Get our weekly <b>What&rsquo;s On</b> email — the best African events in your city, every Thursday. Free, unsubscribe anytime.</p>
       </div>
-      <form action='/submit-thanks' class='subform' method='POST' name='newsletter' onsubmit='var o=this.parentElement.querySelector(\'.subok\');if(o)o.classList.add(\'show\')'>
+      <form action='/submit-thanks' class='subform' method='POST' name='newsletter' onsubmit='var o=this.parentElement.querySelector(\'.subok\');if(o)o.classList.add(\'show\')' data-netlify="true">
         <input type="hidden" name="form-name" value="newsletter">
         <p hidden aria-hidden="true"><label>Skip: <input name="bot-field2"></label></p>
         <input type="email" name="email" required placeholder="you@email.com" aria-label="Your email">
