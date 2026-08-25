@@ -50,3 +50,24 @@
 # checkin.plugservices.ca        /organizer-login       -> ERR                             
 # checkin.plugservices.ca        /submit-event.html     -> ERR                             
 # checkin.plugservices.ca        /zzz-does-not-exist    -> ERR                             
+# CORRECTION appended 2026-08-24 18:35
+#
+# The probe above labelled www.plugservices.ca and checkin.plugservices.ca as
+# "DOES NOT RESOLVE". For www that conclusion is WRONG. The probe ran with
+# MaximumRedirection 0, and PowerShell raises an exception on a 3xx that this
+# script could not always unpack - so a REDIRECT was recorded as an error.
+# www.plugservices.ca demonstrably works: step 9 and step 12 both downloaded
+# /site.js from it and matched the sha1 against the deploy manifest.
+# Read those two rows as "redirects to the apex", not as "dead".
+#
+# checkin.plugservices.ca is still believed to have no DNS record - that is a
+# known open item - but this probe did not distinguish DNS failure from a
+# redirect, so it is NOT proof either.
+#
+# What this probe DID prove, with 9 paths each and identical byte counts:
+#   guest.plugservices.ca     -> forced catch-all, every path returns
+#                                portal-guest.html (33,890 bytes)
+#   organizer.plugservices.ca -> forced catch-all, every path returns
+#                                portal-organizer.html (48,841 bytes)
+#   On both, /site.js and /styles.css return text/html. Asset paths ARE
+#   swallowed. This is why the portal script tag must be an ABSOLUTE URL.
