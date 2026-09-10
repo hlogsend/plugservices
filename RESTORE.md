@@ -18,14 +18,19 @@ name survives delivery.
 2. Other post-processing (minification, asset inlining, injected snippets) is
    baked into these files. Redeploying them re-processes already-processed
    output. It works, but it is not lossless.
-3. /_redirects is UNRECOVERED. See _redirects.OBSERVED for measured routing and
-   _redirects.RECONSTRUCTED for the guess. They must be reconciled by hand.
+3. /_redirects is UNRECOVERED. RECONCILED 2026-09-10: _redirects.OBSERVED and
+   _redirects.RECONSTRUCTED have been merged into _redirects.RECONCILED, which
+   supersedes both. It also fixes a dead loop found during that reconciliation
+   (/organizer-register was swallowed by the organizer.* catch-all and returned
+   the sign-in page). It sits at repo root, NOT in public/, so it cannot go
+   live until this repo is deploy-safe. See AUDIT-2026-09-10.md sections 4 & 8.
 4. netlify.toml.RECONSTRUCTED is derived from the API, not the original file.
 
 ## RESTORE ORDER
-1. Reconcile _redirects.OBSERVED against _redirects.RECONSTRUCTED. Get this
-   right FIRST - it host-routes guest. and organizer., and a wrong catch-all
-   swallows every asset path on those subdomains.
+1. DONE 2026-09-10 - use _redirects.RECONCILED. It host-routes guest. and
+   organizer.; the catch-all does swallow every asset path on those subdomains,
+   which is why both portals load site.js by ABSOLUTE URL (verified). Copy it to
+   public/_redirects only as part of a deploy that has cleared steps 2-4.
 2. Confirm netlify.toml.RECONSTRUCTED against the Netlify UI build settings.
 3. Deploy netlify/functions/submission-created.js WITH the site. Without it,
    organizer event submissions silently stop.

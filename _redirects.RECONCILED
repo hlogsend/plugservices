@@ -1,0 +1,77 @@
+# ============================================================================
+# _redirects — RECONCILED CANDIDATE
+# Produced 2026-09-10 by reconciling _redirects.OBSERVED (live probe evidence)
+# against _redirects.RECONSTRUCTED (the 2026-08-24 guess), per RESTORE.md
+# step 1. This supersedes both. Neither of those files should be used again.
+#
+# THIS FILE IS DELIBERATELY NOT IN public/. The repo is still not deploy-safe
+# (stale site.js, post-processed HTML, unverified function). Placing it in the
+# publish directory would make it live the moment anyone links this repo to
+# Netlify, which RESTORE.md forbids. Move it to public/_redirects only as part
+# of a deploy that has cleared RESTORE.md steps 2-4.
+#
+# Order matters: specific paths MUST stay above the /* wildcards.
+# ============================================================================
+
+# --- guest.plugservices.ca : forced catch-all -------------------------------
+# EVIDENCE (OBSERVED): 9 of 9 probed paths — including /site.js, /styles.css
+# and /zzz-does-not-exist — all returned portal-guest.html at 33,890 bytes.
+# The catch-all swallows asset paths and serves them as text/html, which is
+# why the portal's <script> tag MUST stay an absolute URL.
+# VERIFIED 2026-09-10: portal-guest.html loads src="https://plugservices.ca/site.js"
+# (absolute). Do not ever relativise it.
+https://guest.plugservices.ca/*        /portal-guest.html        200!
+http://guest.plugservices.ca/*         /portal-guest.html        200!
+
+# --- organizer.plugservices.ca : specific paths, then catch-all -------------
+# EVIDENCE (OBSERVED): same forced catch-all, 48,841 bytes on all 9 paths.
+# /register was separately confirmed to return the register page, so it must
+# precede the wildcard.
+#
+# FIX ADDED 2026-09-10 — /organizer-register was a dead loop.
+#   portal-organizer.html links to href="/organizer-register" (relative).
+#   On this host that path hit the catch-all and returned the LOGIN portal,
+#   so "Register now — it's free" bounced organizers back to the sign-in
+#   screen. Only /register was routed. Both spellings are now routed.
+#   The mirror case is safe by accident: organizer-register.html links to
+#   href="/organizer-login", which the catch-all resolves to the login
+#   portal — the intended destination. It is routed explicitly below anyway
+#   so it stops depending on luck.
+https://organizer.plugservices.ca/register             /organizer-register.html   200!
+http://organizer.plugservices.ca/register              /organizer-register.html   200!
+https://organizer.plugservices.ca/organizer-register   /organizer-register.html   200!
+http://organizer.plugservices.ca/organizer-register    /organizer-register.html   200!
+https://organizer.plugservices.ca/organizer-login      /portal-organizer.html     200!
+http://organizer.plugservices.ca/organizer-login       /portal-organizer.html     200!
+https://organizer.plugservices.ca/*                    /portal-organizer.html     200!
+http://organizer.plugservices.ca/*                     /portal-organizer.html     200!
+
+# --- apex : friendly portal paths -------------------------------------------
+# EVIDENCE (OBSERVED): on plugservices.ca, /guest-login returned 33,890 bytes
+# and /organizer-login returned 48,841 bytes — the two portal pages.
+/guest-login          /portal-guest.html         200
+/organizer-login      /portal-organizer.html     200
+/organizer-register   /organizer-register.html   200
+
+# ============================================================================
+# NOT RULES IN THIS FILE — recorded so nobody re-adds them by mistake
+# ============================================================================
+# www.plugservices.ca
+#   The OBSERVED probe first labelled www "does not resolve". That was a probe
+#   artefact: it ran with MaximumRedirection 0 and PowerShell threw on the 3xx.
+#   www demonstrably works — /site.js was downloaded from it twice and the
+#   sha1 matched the deploy manifest. www -> apex is a Netlify DOMAIN-level
+#   redirect configured in site settings, NOT a _redirects rule. Adding one
+#   here would be redundant at best. _redirects.RECONSTRUCTED was right to
+#   omit it; it was only the commentary that was wrong.
+#
+# checkin.plugservices.ca
+#   Believed to have no DNS record. The probe did NOT distinguish a DNS
+#   failure from a redirect, so this is UNPROVEN either way. Open item.
+#
+# Extensionless URLs (/events, /about, /city-calgary, /submit-event, ...)
+#   These resolve through Netlify's built-in Pretty URLs post-processing,
+#   not through this file. Both /events and /events.html return 200.
+#
+# Confirmed 404 on the apex (intentionally unrouted): /register /my-tickets
+#   /checkin /guest
